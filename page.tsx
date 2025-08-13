@@ -1,3 +1,4 @@
+
 'use client';
 
 import React, { useMemo, useState } from 'react';
@@ -41,7 +42,7 @@ function SIPCalculator() {
         ['Annual Return', `${rate}%`],
         ['Months', numberFmt(years*12)],
       ]} />
-      <Disclaimer text="This tool provides educational estimates, not financial advice. Actual returns vary." />
+      <Disclaimer text="Educational estimates; not financial advice. Actual returns vary." />
     </CalculatorCard>
   );
 }
@@ -95,6 +96,99 @@ function BMICalculator() {
       <ResultRow label="BMI" value={res.bmi.toFixed(1)} highlight />
       <ResultRow label="Category" value={res.category} />
       <Disclaimer text="Health info only; consult a professional for medical advice." />
+    </CalculatorCard>
+  );
+}
+
+// -------- Currency Converter (sample or manual) --------
+const SAMPLE_RATES: Record<string, number> = {
+  USD: 1,
+  INR: 83,
+  AED: 3.67,
+  EUR: 0.92,
+};
+function CurrencyConverter() {
+  const [base, setBase] = useState('INR');
+  const [quote, setQuote] = useState('AED');
+  const [amount, setAmount] = useState(1000);
+  const [useSample, setUseSample] = useState(true);
+  const [manualRate, setManualRate] = useState(0);
+
+  const rate = useMemo(() => {
+    if (useSample) {
+      const usdPerBase = 1 / SAMPLE_RATES[base];
+      const quotePerUsd = SAMPLE_RATES[quote];
+      return usdPerBase * quotePerUsd;
+    }
+    return manualRate || 0;
+  }, [base, quote, manualRate, useSample]);
+
+  const converted = amount * rate;
+
+  return (
+    <CalculatorCard title="Currency Converter" subtitle="Convert between INR, AED, USD, EUR">
+      <FormGrid>
+        <SelectField label="From" value={base} onChange={setBase} options={Object.keys(SAMPLE_RATES)} />
+        <SelectField label="To" value={quote} onChange={setQuote} options={Object.keys(SAMPLE_RATES)} />
+        <NumberField label="Amount" value={amount} onChange={setAmount} />
+        <label className="flex items-center gap-2 mt-6">
+          <input type="checkbox" checked={useSample} onChange={(e)=>setUseSample(e.target.checked)} />
+          <span className="text-sm">Use sample rates (offline demo)</span>
+        </label>
+        {!useSample && (
+          <NumberField label={`Manual Rate (1 ${base} = ? ${quote})`} value={manualRate} onChange={setManualRate} />
+        )}
+      </FormGrid>
+      <ResultRow label="Rate" value={rate ? `${rate.toFixed(4)} ${quote} / ${base}` : '—'} />
+      <ResultRow label="Converted" value={rate ? `${converted.toFixed(2)} ${quote}` : '—'} highlight />
+      <Disclaimer text="Sample rates for demo. For production, fetch live FX via a serverless API." />
+    </CalculatorCard>
+  );
+}
+
+// -------- GST / VAT Calculator --------
+function GSTVATCalculator() {
+  const [region, setRegion] = useState<'India' | 'UAE'>('India');
+  const [base, setBase] = useState(1000);
+  const [rate, setRate] = useState(18);
+  const [mode, setMode] = useState<'Exclusive'|'Inclusive'>('Exclusive');
+  const uaeRate = 5;
+
+  const effectiveRate = region === 'India' ? rate : uaeRate;
+
+  let tax = 0, total = 0, cgst = 0, sgst = 0, taxable = base;
+  if (mode === 'Exclusive') {
+    tax = base * (effectiveRate/100);
+    total = base + tax;
+  } else {
+    const divisor = 1 + (effectiveRate/100);
+    taxable = base / divisor;
+    tax = base - taxable;
+    total = base;
+  }
+  if (region === 'India') {
+    cgst = tax/2; sgst = tax/2;
+  }
+
+  return (
+    <CalculatorCard title="GST / VAT Calculator" subtitle="India GST (split CGST/SGST) or UAE VAT">
+      <FormGrid>
+        <SelectField label="Region" value={region} onChange={(v)=>setRegion(v as any)} options={['India','UAE']} />
+        {region === 'India' ? (
+          <SelectField label="GST Rate" value={String(rate)} onChange={(v)=>setRate(parseFloat(v)||0)} options={['0','5','12','18','28']} />
+        ) : (
+          <NumberField label="VAT Rate" value={uaeRate} onChange={()=>{}} suffix="%" />
+        )}
+        <NumberField label={mode==='Exclusive' ? 'Base Amount' : 'Amount (Tax Inclusive)'} value={base} onChange={setBase} />
+        <SelectField label="Mode" value={mode} onChange={(v)=>setMode(v as any)} options={['Exclusive','Inclusive']} />
+      </FormGrid>
+      <MiniTable rows={[
+        ['Taxable Value', currencyFmt(taxable, 'INR')],
+        ['Tax Amount', currencyFmt(tax, 'INR')],
+        ...(region === 'India' ? [['CGST', currencyFmt(cgst, 'INR')], ['SGST', currencyFmt(sgst, 'INR')]] as any : []),
+        ['Total Payable', currencyFmt(total, 'INR')],
+      ]} />
+      <Disclaimer text="Rates simplified for quick estimation. Check your state rules for special cases." />
     </CalculatorCard>
   );
 }
@@ -175,6 +269,8 @@ const TOOL_REGISTRY = [
   { id: 'sip', name: 'SIP Calculator', component: SIPCalculator, tags: ['finance','investing','mutual funds']},
   { id: 'emi', name: 'Loan EMI Calculator', component: EMICalculator, tags: ['finance','loan','emi']},
   { id: 'bmi', name: 'BMI Calculator', component: BMICalculator, tags: ['health','fitness','bmi']},
+  { id: 'fx', name: 'Currency Converter', component: CurrencyConverter, tags: ['finance','currency','forex']},
+  { id: 'gst', name: 'GST / VAT Calculator', component: GSTVATCalculator, tags: ['finance','tax','gst','vat']},
 ];
 
 export default function Page() {
@@ -203,7 +299,7 @@ export default function Page() {
           <>
             <div className="mb-6 grid gap-4 md:grid-cols-[1fr_auto] items-center">
               <label className="relative w-full">
-                <input id="site-search" placeholder="Search tools (e.g., EMI, BMI, SIP)" value={query} onChange={(e)=>setQuery((e.target as HTMLInputElement).value)}
+                <input id="site-search" placeholder="Search tools (e.g., EMI, BMI, SIP, GST, Currency)" value={query} onChange={(e)=>setQuery((e.target as HTMLInputElement).value)}
                   className="w-full px-4 py-3 pr-10 rounded-2xl border border-slate-300 dark:border-slate-700 bg-white/70 dark:bg-slate-950/40 outline-none" />
                 <kbd className="absolute right-2 top-1/2 -translate-y-1/2 text-xs px-1.5 py-0.5 rounded bg-slate-100 dark:bg-slate-800 border border-slate-200 dark:border-slate-700">/</kbd>
               </label>

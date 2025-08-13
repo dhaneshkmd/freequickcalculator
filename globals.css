@@ -3,8 +3,5 @@
 @tailwind utilities;
 
 :root { color-scheme: light dark; }
-
 html, body { height: 100%; }
-
-/* Basic typography */
 body { @apply text-slate-900 dark:text-slate-100 bg-gradient-to-b from-slate-50 to-white dark:from-slate-950 dark:to-slate-900; }

@@ -3,9 +3,6 @@
 /.pnp
 .pnp.js
 
-# testing
-/coverage
-
 # next.js
 /.next/
 /out/
@@ -15,5 +12,4 @@
 
 # misc
 .DS_Store
-.env.local
-.env
+.env*
