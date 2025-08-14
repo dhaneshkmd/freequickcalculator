@@ -1,0 +1,40 @@
+export type Category='Finance'|'Health'|'Utilities'|'Conversions'|'Tax'|'Dates & Time'|'Lifestyle';
+export type ComponentId='SIP'|'EMI'|'BMI'|null;
+export type Calculator={name:string; slug:string; description:string; category:Category; keywords:string[]; status:'ready'|'planned'; componentId:ComponentId; formulaNote?:string;};
+export const calculators:Calculator[]=[
+  {name:"SIP Calculator",slug:"sip",description:"Estimate the future value of monthly investments.",category:"Finance",keywords:["mutual fund","investment","sip"],status:"ready",componentId:"SIP",formulaNote:"FV = P * ((1+i)^n - 1)/i * (1+i)"},
+  {name:"EMI Calculator",slug:"emi",description:"Monthly loan payment with interest and totals.",category:"Finance",keywords:["loan","emi","amortization","interest"],status:"ready",componentId:"EMI",formulaNote:"EMI = P*i*(1+i)^n / ((1+i)^n - 1)"},
+  {name:"BMI Calculator",slug:"bmi",description:"Body Mass Index from height & weight.",category:"Health",keywords:["bmi","health"],status:"ready",componentId:"BMI",formulaNote:"BMI = kg / (m^2)"},
+  {name:"Compound Interest",slug:"compound-interest",description:"Growth with compounding interest.",category:"Finance",keywords:["compound","interest"],status:"planned",componentId:null,formulaNote:"A=P(1+r/n)^(nt)"},
+  {name:"Simple Interest",slug:"simple-interest",description:"Interest without compounding.",category:"Finance",keywords:["simple","interest"],status:"planned",componentId:null,formulaNote:"I = P*r*t"},
+  {name:"Loan Eligibility",slug:"loan-eligibility",description:"Estimate max loan amount from income.",category:"Finance",keywords:["loan","eligibility"],status:"planned",componentId:null},
+  {name:"Loan Compare",slug:"loan-compare",description:"Compare EMIs across lenders.",category:"Finance",keywords:["loan","compare"],status:"planned",componentId:null},
+  {name:"Mortgage Payment",slug:"mortgage",description:"Home loan monthly payment.",category:"Finance",keywords:["mortgage","home"],status:"planned",componentId:null},
+  {name:"Home Affordability",slug:"home-affordability",description:"Estimate home purchase budget.",category:"Finance",keywords:["mortgage","budget"],status:"planned",componentId:null},
+  {name:"ROI",slug:"roi",description:"Return on Investment percentage.",category:"Finance",keywords:["return","profit"],status:"planned",componentId:null,formulaNote:"(Gain - Cost)/Cost"},
+  {name:"Break-even Point",slug:"break-even",description:"Units or revenue to break even.",category:"Finance",keywords:["fixed cost","margin"],status:"planned",componentId:null},
+  {name:"Inflation Adjusted Return",slug:"inflation-adjusted",description:"Real return after inflation.",category:"Finance",keywords:["inflation","real"],status:"planned",componentId:null},
+  {name:"Fixed Deposit (FD)",slug:"fd",description:"FD maturity and interest.",category:"Finance",keywords:["fd","bank"],status:"planned",componentId:null},
+  {name:"Recurring Deposit (RD)",slug:"rd",description:"RD maturity value.",category:"Finance",keywords:["rd","bank"],status:"planned",componentId:null},
+  {name:"Savings Goal",slug:"savings-goal",description:"Monthly saving needed for a goal.",category:"Finance",keywords:["goal","savings"],status:"planned",componentId:null},
+  {name:"Currency Converter",slug:"currency-converter",description:"Convert amounts across currencies.",category:"Finance",keywords:["forex","currency"],status:"planned",componentId:null},
+  {name:"BMR",slug:"bmr",description:"Basal Metabolic Rate estimate.",category:"Health",keywords:["metabolism","calorie"],status:"planned",componentId:null},
+  {name:"Body Fat %",slug:"body-fat",description:"Body fat estimation.",category:"Health",keywords:["fat","composition"],status:"planned",componentId:null},
+  {name:"Daily Calorie Needs",slug:"daily-calories",description:"Maintenance calories per day.",category:"Health",keywords:["tdee","calories"],status:"planned",componentId:null},
+  {name:"Calories Burned",slug:"calories-burned",description:"Calories burned during activities.",category:"Health",keywords:["exercise","burn"],status:"planned",componentId:null},
+  {name:"Pregnancy Due Date",slug:"pregnancy-due-date",description:"Estimate due date from LMP.",category:"Health",keywords:["due date","pregnancy"],status:"planned",componentId:null},
+  {name:"Percentage",slug:"percentage",description:"Find X% of Y or reverse.",category:"Utilities",keywords:["percent","increase","decrease"],status:"planned",componentId:null},
+  {name:"Discount",slug:"discount",description:"Sale price after discount.",category:"Utilities",keywords:["sale","percent off"],status:"planned",componentId:null},
+  {name:"Tip",slug:"tip",description:"Restaurant tip and bill split.",category:"Utilities",keywords:["bill","gratuity"],status:"planned",componentId:null},
+  {name:"Unit: Length",slug:"unit-length",description:"Meters, feet, miles and more.",category:"Conversions",keywords:["length","convert"],status:"planned",componentId:null},
+  {name:"Unit: Weight",slug:"unit-weight",description:"Kg, lb, oz conversions.",category:"Conversions",keywords:["weight","convert"],status:"planned",componentId:null},
+  {name:"Unit: Temperature",slug:"unit-temperature",description:"Celsius, Fahrenheit, Kelvin.",category:"Conversions",keywords:["temperature","convert"],status:"planned",componentId:null},
+  {name:"GST / VAT",slug:"gst-vat",description:"Add or remove GST/VAT.",category:"Tax",keywords:["gst","vat","tax"],status:"planned",componentId:null},
+  {name:"Income Tax (India)",slug:"income-tax-india",description:"Estimate income tax slabs.",category:"Tax",keywords:["tax","india"],status:"planned",componentId:null},
+  {name:"Sales Tax",slug:"sales-tax",description:"Price with sales tax.",category:"Tax",keywords:["sales","tax"],status:"planned",componentId:null},
+  {name:"Date Difference",slug:"date-diff",description:"Days between dates.",category:"Dates & Time",keywords:["date","difference"],status:"planned",componentId:null},
+  {name:"Time Zone Converter",slug:"time-zone",description:"Convert across time zones.",category:"Dates & Time",keywords:["time","zone","utc"],status:"planned",componentId:null},
+  {name:"Age Calculator",slug:"age",description:"Exact age from birthdate.",category:"Lifestyle",keywords:["age","birthday"],status:"planned",componentId:null},
+  {name:"Leap Year Checker",slug:"leap-year",description:"Is a year a leap year?",category:"Dates & Time",keywords:["leap","year"],status:"planned",componentId:null}
+];
+export const getCalculatorBySlug=(slug:string)=> calculators.find(c=>c.slug===slug);

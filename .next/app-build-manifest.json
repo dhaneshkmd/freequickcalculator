@@ -1,0 +1,36 @@
+{
+  "pages": {
+    "/_not-found/page": [
+      "static/chunks/webpack-35802d3bbc99b41b.js",
+      "static/chunks/fd9d1056-d37e50b4175101a4.js",
+      "static/chunks/23-723a0d5c848a3696.js",
+      "static/chunks/main-app-a509f8d6ade91bc4.js",
+      "static/chunks/app/_not-found/page-c6acd778ab962a60.js"
+    ],
+    "/layout": [
+      "static/chunks/webpack-35802d3bbc99b41b.js",
+      "static/chunks/fd9d1056-d37e50b4175101a4.js",
+      "static/chunks/23-723a0d5c848a3696.js",
+      "static/chunks/main-app-a509f8d6ade91bc4.js",
+      "static/css/ebff1ba9c54997e8.css",
+      "static/chunks/231-0fefb1d35a503081.js",
+      "static/chunks/app/layout-984df98145ed9825.js"
+    ],
+    "/calculator/[slug]/page": [
+      "static/chunks/webpack-35802d3bbc99b41b.js",
+      "static/chunks/fd9d1056-d37e50b4175101a4.js",
+      "static/chunks/23-723a0d5c848a3696.js",
+      "static/chunks/main-app-a509f8d6ade91bc4.js",
+      "static/chunks/231-0fefb1d35a503081.js",
+      "static/chunks/app/calculator/[slug]/page-d58ec9377de8e670.js"
+    ],
+    "/page": [
+      "static/chunks/webpack-35802d3bbc99b41b.js",
+      "static/chunks/fd9d1056-d37e50b4175101a4.js",
+      "static/chunks/23-723a0d5c848a3696.js",
+      "static/chunks/main-app-a509f8d6ade91bc4.js",
+      "static/chunks/231-0fefb1d35a503081.js",
+      "static/chunks/app/page-cd4620ddd1940e8e.js"
+    ]
+  }
+}
