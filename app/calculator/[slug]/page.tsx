@@ -9,14 +9,19 @@ import EMI from "../../../components/calculators/EMI";
 import SIP from "../../../components/calculators/SIP";
 import Age from "../../../components/calculators/Age";
 
-// NEW calculators
+// NEW calculators already added
 import BMR from "../../../components/calculators/BMR";
 import BodyFat from "../../../components/calculators/BodyFat";
 import BreakEven from "../../../components/calculators/BreakEven";
+import CompoundInterest from "../../../components/calculators/CompoundInterest";
+import CurrencyConverter from "../../../components/calculators/CurrencyConverter";
+import DailyCalories from "../../../components/calculators/DailyCalories";
+import CaloriesBurned from "../../../components/calculators/CaloriesBurned";
+import DateDiff from "../../../components/calculators/DateDiff";
 
 type Props = { params: { slug: string } };
 
-// (Optional) Only pre-render "ready" calculators
+// Only pre-render "ready" calculators
 export function generateStaticParams() {
   return calculators
     .filter(c => c.status === "ready")
@@ -29,7 +34,7 @@ export function generateMetadata({ params }: Props): Metadata {
   return {
     title: calc.name,
     description: calc.description,
-    keywords: calc.keywords
+    keywords: calc.keywords,
   };
 }
 
@@ -39,13 +44,18 @@ export default function CalculatorPage({ params }: Props) {
 
   function render() {
     switch (calc!.componentId) {
-      case "BMI":         return <BMI />;
-      case "EMI":         return <EMI />;
-      case "SIP":         return <SIP />;
-      case "AGE":         return <Age />;
-      case "BMR":         return <BMR />;           // NEW
-      case "BODY_FAT":    return <BodyFat />;       // NEW
-      case "BREAK_EVEN":  return <BreakEven />;     // NEW
+      case "BMI":                return <BMI />;
+      case "EMI":                return <EMI />;
+      case "SIP":                return <SIP />;
+      case "AGE":                return <Age />;
+      case "BMR":                return <BMR />;
+      case "BODY_FAT":           return <BodyFat />;
+      case "BREAK_EVEN":         return <BreakEven />;
+      case "COMPOUND_INTEREST":  return <CompoundInterest />;
+      case "CURRENCY":           return <CurrencyConverter />;
+      case "DAILY_CALORIES":     return <DailyCalories />;
+      case "CALORIES_BURNED":    return <CaloriesBurned />;
+      case "DATE_DIFF":          return <DateDiff />;
       default:
         return (
           <ComingSoon
@@ -61,7 +71,9 @@ export default function CalculatorPage({ params }: Props) {
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">{calc!.name}</h1>
         {calc?.formulaNote && (
-          <p className="text-sm text-gray-500">Formula: {calc.formulaNote}</p>
+          <p className="text-sm text-gray-500">
+            Formula: {calc.formulaNote}
+          </p>
         )}
       </header>
       {render()}
