@@ -1,7 +1,18 @@
-export type Category='Finance'|'Health'|'Utilities'|'Conversions'|'Tax'|'Dates & Time'|'Lifestyle';
-export type ComponentId = 'SIP' | 'EMI' | 'BMI' | 'AGE' | null;
-export type Calculator={name:string; slug:string; description:string; category:Category; keywords:string[]; status:'ready'|'planned'; componentId:ComponentId; formulaNote?:string;};
-export const calculators:Calculator[]=[
+export type Category = 'Finance'|'Health'|'Utilities'|'Conversions'|'Tax'|'Dates & Time'|'Lifestyle';
+export type ComponentId = 'SIP'|'EMI'|'BMI'|'AGE'|null;
+
+export type Calculator = {
+  name: string;
+  slug: string;
+  description: string;
+  category: Category;
+  keywords: string[];
+  status: 'ready'|'planned';
+  componentId: ComponentId;
+  formulaNote?: string;
+};
+
+export const calculators: Calculator[] = [
   {name:"SIP Calculator",slug:"sip",description:"Estimate the future value of monthly investments.",category:"Finance",keywords:["mutual fund","investment","sip"],status:"ready",componentId:"SIP",formulaNote:"FV = P * ((1+i)^n - 1)/i * (1+i)"},
   {name:"EMI Calculator",slug:"emi",description:"Monthly loan payment with interest and totals.",category:"Finance",keywords:["loan","emi","amortization","interest"],status:"ready",componentId:"EMI",formulaNote:"EMI = P*i*(1+i)^n / ((1+i)^n - 1)"},
   {name:"BMI Calculator",slug:"bmi",description:"Body Mass Index from height & weight.",category:"Health",keywords:["bmi","health"],status:"ready",componentId:"BMI",formulaNote:"BMI = kg / (m^2)"},
@@ -34,7 +45,9 @@ export const calculators:Calculator[]=[
   {name:"Sales Tax",slug:"sales-tax",description:"Price with sales tax.",category:"Tax",keywords:["sales","tax"],status:"planned",componentId:null},
   {name:"Date Difference",slug:"date-diff",description:"Days between dates.",category:"Dates & Time",keywords:["date","difference"],status:"planned",componentId:null},
   {name:"Time Zone Converter",slug:"time-zone",description:"Convert across time zones.",category:"Dates & Time",keywords:["time","zone","utc"],status:"planned",componentId:null},
-  {name: "Age Calculator", slug: "age", description: "Exact age from birthdate.", category: "Lifestyle", keywords: ["age","birthday"], status: "ready", componentId: "AGE" }
+  {name:"Age Calculator",slug:"age",description:"Exact age from birthdate.",category:"Lifestyle",keywords:["age","birthday"],status:"ready",componentId:"AGE"}, // ← COMMA here
   {name:"Leap Year Checker",slug:"leap-year",description:"Is a year a leap year?",category:"Dates & Time",keywords:["leap","year"],status:"planned",componentId:null}
 ];
-export const getCalculatorBySlug=(slug:string)=> calculators.find(c=>c.slug===slug);
+
+export const getCalculatorBySlug = (slug: string) =>
+  calculators.find(c => c.slug === slug);
