@@ -5,7 +5,7 @@ import ComingSoon from "../../../components/ComingSoon";
 import BMI from "../../../components/calculators/BMI";
 import EMI from "../../../components/calculators/EMI";
 import SIP from "../../../components/calculators/SIP";
-
+import Age from '@/components/calculators/Age";
 type Props = { params: { slug: string } };
 
 export function generateStaticParams() {
@@ -27,6 +27,7 @@ export default function CalculatorPage({ params }: Props) {
       case "BMI": return <BMI />;
       case "EMI": return <EMI />;
       case "SIP": return <SIP />;
+      case 'AGE': return <Age />;
       default: return <ComingSoon title={`${calc!.name} — Coming Soon`} description={calc!.description} />;
     }
   }
