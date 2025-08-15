@@ -5,7 +5,7 @@ import ComingSoon from "../../../components/ComingSoon";
 import BMI from "../../../components/calculators/BMI";
 import EMI from "../../../components/calculators/EMI";
 import SIP from "../../../components/calculators/SIP";
-import Age from '@/components/calculators/Age";
+import Age from "../../../components/calculators/Age";
 type Props = { params: { slug: string } };
 
 export function generateStaticParams() {
