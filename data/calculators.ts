@@ -1,5 +1,5 @@
 export type Category = 'Finance'|'Health'|'Utilities'|'Conversions'|'Tax'|'Dates & Time'|'Lifestyle';
-export type ComponentId = 'SIP'|'EMI'|'BMI'|'AGE'|null;
+export type ComponentId = 'SIP'|'EMI'|'BMI'|'AGE'|'BMR'|'BODY_FAT'|'BREAK_EVEN'|null;
 
 export type Calculator = {
   name: string;
@@ -23,14 +23,22 @@ export const calculators: Calculator[] = [
   {name:"Mortgage Payment",slug:"mortgage",description:"Home loan monthly payment.",category:"Finance",keywords:["mortgage","home"],status:"planned",componentId:null},
   {name:"Home Affordability",slug:"home-affordability",description:"Estimate home purchase budget.",category:"Finance",keywords:["mortgage","budget"],status:"planned",componentId:null},
   {name:"ROI",slug:"roi",description:"Return on Investment percentage.",category:"Finance",keywords:["return","profit"],status:"planned",componentId:null,formulaNote:"(Gain - Cost)/Cost"},
-  {name:"Break-even Point",slug:"break-even",description:"Units or revenue to break even.",category:"Finance",keywords:["fixed cost","margin"],status:"planned",componentId:null},
+
+  // ✅ Break-even now live
+  {name:"Break-even Point",slug:"break-even",description:"Units or revenue to break even.",category:"Finance",keywords:["fixed cost","margin"],status:"ready",componentId:"BREAK_EVEN",formulaNote:"Q = Fixed / (Price − Variable); Revenue = Q × Price"},
+
   {name:"Inflation Adjusted Return",slug:"inflation-adjusted",description:"Real return after inflation.",category:"Finance",keywords:["inflation","real"],status:"planned",componentId:null},
   {name:"Fixed Deposit (FD)",slug:"fd",description:"FD maturity and interest.",category:"Finance",keywords:["fd","bank"],status:"planned",componentId:null},
   {name:"Recurring Deposit (RD)",slug:"rd",description:"RD maturity value.",category:"Finance",keywords:["rd","bank"],status:"planned",componentId:null},
   {name:"Savings Goal",slug:"savings-goal",description:"Monthly saving needed for a goal.",category:"Finance",keywords:["goal","savings"],status:"planned",componentId:null},
   {name:"Currency Converter",slug:"currency-converter",description:"Convert amounts across currencies.",category:"Finance",keywords:["forex","currency"],status:"planned",componentId:null},
-  {name:"BMR",slug:"bmr",description:"Basal Metabolic Rate estimate.",category:"Health",keywords:["metabolism","calorie"],status:"planned",componentId:null},
-  {name:"Body Fat %",slug:"body-fat",description:"Body fat estimation.",category:"Health",keywords:["fat","composition"],status:"planned",componentId:null},
+
+  // ✅ BMR now live
+  {name:"BMR",slug:"bmr",description:"Basal Metabolic Rate estimate.",category:"Health",keywords:["metabolism","calorie"],status:"ready",componentId:"BMR",formulaNote:"Mifflin–St Jeor"},
+
+  // ✅ Body Fat now live
+  {name:"Body Fat %",slug:"body-fat",description:"Body fat estimation.",category:"Health",keywords:["fat","composition"],status:"ready",componentId:"BODY_FAT",formulaNote:"U.S. Navy method"},
+
   {name:"Daily Calorie Needs",slug:"daily-calories",description:"Maintenance calories per day.",category:"Health",keywords:["tdee","calories"],status:"planned",componentId:null},
   {name:"Calories Burned",slug:"calories-burned",description:"Calories burned during activities.",category:"Health",keywords:["exercise","burn"],status:"planned",componentId:null},
   {name:"Pregnancy Due Date",slug:"pregnancy-due-date",description:"Estimate due date from LMP.",category:"Health",keywords:["due date","pregnancy"],status:"planned",componentId:null},
@@ -45,7 +53,8 @@ export const calculators: Calculator[] = [
   {name:"Sales Tax",slug:"sales-tax",description:"Price with sales tax.",category:"Tax",keywords:["sales","tax"],status:"planned",componentId:null},
   {name:"Date Difference",slug:"date-diff",description:"Days between dates.",category:"Dates & Time",keywords:["date","difference"],status:"planned",componentId:null},
   {name:"Time Zone Converter",slug:"time-zone",description:"Convert across time zones.",category:"Dates & Time",keywords:["time","zone","utc"],status:"planned",componentId:null},
-  {name:"Age Calculator",slug:"age",description:"Exact age from birthdate.",category:"Lifestyle",keywords:["age","birthday"],status:"ready",componentId:"AGE"}, // ← COMMA here
+
+  {name:"Age Calculator",slug:"age",description:"Exact age from birthdate.",category:"Lifestyle",keywords:["age","birthday"],status:"ready",componentId:"AGE"},
   {name:"Leap Year Checker",slug:"leap-year",description:"Is a year a leap year?",category:"Dates & Time",keywords:["leap","year"],status:"planned",componentId:null}
 ];
 
