@@ -1,3 +1,4 @@
+// app/layout.tsx
 import type { Metadata } from "next";
 import Script from "next/script";
 import "../styles/globals.css";
@@ -13,7 +14,9 @@ export const metadata: Metadata = {
   description:
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
-  // Helps AdSense site verification
+  viewport: "width=device-width, initial-scale=1",
+  robots: { index: true, follow: true },
+  // ✅ AdSense meta-tag verification
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
@@ -37,14 +40,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* CookieYes CMP */}
+        {/* CookieYes CMP (live ID) */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
           strategy="beforeInteractive"
         />
 
-        {/* Google AdSense loader (ensure it's in <head> for crawler visibility) */}
+        {/* Google AdSense loader — in <head> for crawler visibility */}
         <Script
           id="adsense-loader"
           strategy="beforeInteractive"
