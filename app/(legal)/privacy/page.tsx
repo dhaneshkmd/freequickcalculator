@@ -30,9 +30,11 @@ export default function PrivacyPage() {
       <h2>Advertising (Google AdSense)</h2>
       <p>
         We show ads via Google AdSense. Google may use cookies to personalize ads
-        and measure performance. You can manage consent in the banner and visit
-        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noreferrer"> Google’s Ads Policy</a>
-        {" "}to learn more. Where required, we request consent for
+        and measure performance. You can manage consent in the banner and visit{" "}
+        <a href="https://policies.google.com/technologies/ads" target="_blank" rel="noreferrer">
+          Google’s Ads Policy
+        </a>{" "}
+        to learn more. Where required, we request consent for
         <strong> ad_user_data</strong>, <strong>ad_personalization</strong>, and
         <strong> ad_storage</strong>.
       </p>
@@ -55,7 +57,7 @@ export default function PrivacyPage() {
 
       <h2>Contact</h2>
       <p>
-        Email: <a href="mailto:contact@freequickcalculator.com">contact@freequickcalculator.com</a>
+        Email: <a href="mailto:dhaneshkmd82@gmail.com">dhaneshkmd82@gmail.com</a>
       </p>
     </main>
   );
