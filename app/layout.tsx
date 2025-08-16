@@ -8,7 +8,7 @@ import Container from "../components/Container";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
-// Read GA4 ID from env to avoid hard-coding (set in Vercel as NEXT_PUBLIC_GA_ID)
+// GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
@@ -54,8 +54,36 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script id="gtag-config" strategy="beforeInteractive">
               {`
                 gtag('js', new Date());
-                // Don't auto-send page_view; wait for consent
+                // Don't auto-send page_view; we'll send it after consent
                 gtag('config', '${GA_ID}', { send_page_view: false, anonymize_ip: true });
+              `}
+            </Script>
+
+            {/* Bridge: fire page_view when consent becomes granted (and once on load) */}
+            <Script id="ga4-pageview-after-consent" strategy="afterInteractive">
+              {`
+                (function () {
+                  function sendPV() {
+                    try {
+                      gtag('event', 'page_view', {
+                        page_title: document.title,
+                        page_location: location.href,
+                        page_path: location.pathname
+                      });
+                    } catch (e) {}
+                  }
+
+                  // Send once on load (Consent Mode will drop it if still denied)
+                  if (document.readyState !== 'loading') {
+                    sendPV();
+                  } else {
+                    window.addEventListener('DOMContentLoaded', sendPV);
+                  }
+
+                  // Send again when the user accepts/updates consent via CookieYes
+                  window.addEventListener('cookieyes_consent_update', sendPV);
+                  window.addEventListener('cookieyes_consent_accept', sendPV);
+                })();
               `}
             </Script>
           </>
