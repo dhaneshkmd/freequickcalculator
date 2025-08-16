@@ -1,5 +1,6 @@
 // app/layout.tsx
-import type { Metadata } from "next";
+import type { Metadata, Viewport } from "next";
+import { Suspense } from "react";
 import Script from "next/script";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
@@ -18,10 +19,15 @@ export const metadata: Metadata = {
   description:
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
-  viewport: "width=device-width, initial-scale=1",
   robots: { index: true, follow: true },
   // AdSense site verification meta
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
+};
+
+// ✅ viewport must be a separate export (not inside metadata)
+export const viewport: Viewport = {
+  width: "device-width",
+  initialScale: 1,
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -88,8 +94,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
 
-        {/* GA4 page_view: initial + route changes + on consent update */}
-        <GA4PageView />
+        {/* ✅ Wrap GA4PageView (uses useSearchParams) in Suspense */}
+        <Suspense fallback={null}>
+          <GA4PageView />
+        </Suspense>
 
         {/* Cookieless measurements */}
         <Analytics />
