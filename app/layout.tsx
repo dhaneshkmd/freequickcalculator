@@ -13,6 +13,8 @@ export const metadata: Metadata = {
   description:
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
+  // Optional but recommended for site verification with AdSense
+  other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
@@ -42,14 +44,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           strategy="beforeInteractive"
         />
 
-        {/* (Optional) AdSense loader — enable after approval & replace pub id */}
-        {/*
+        {/* Google AdSense loader (after Consent defaults + CMP) */}
         <Script
           async
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-XXXXXXXXXXXXXXXX"
+          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117"
           crossOrigin="anonymous"
         />
-        */}
 
         <Navbar />
         <main className="py-8">
