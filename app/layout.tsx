@@ -13,7 +13,7 @@ export const metadata: Metadata = {
   description:
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
-  // Optional but recommended for site verification with AdSense
+  // Helps AdSense site verification
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
@@ -37,15 +37,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* CookieYes CMP (your live ID) */}
+        {/* CookieYes CMP */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
           strategy="beforeInteractive"
         />
 
-        {/* Google AdSense loader (after Consent defaults + CMP) */}
+        {/* Google AdSense loader (ensure it's in <head> for crawler visibility) */}
         <Script
+          id="adsense-loader"
+          strategy="beforeInteractive"
           async
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117"
           crossOrigin="anonymous"
