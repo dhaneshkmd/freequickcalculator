@@ -11,7 +11,7 @@ export default function ContactPage() {
       <h1>Contact</h1>
       <p>
         For feedback, feature requests, or privacy questions, email us at{" "}
-        <a href="mailto:contact@freequickcalculator.com">contact@freequickcalculator.com</a>.
+        <a href="mailto:dhaneshkmd82@gmail.com">dhaneshkmd82@gmail.com</a>.
       </p>
       <p>
         Business name: Free Quick Calculator<br />
