@@ -1,15 +1,28 @@
 // app/(legal)/about/page.tsx
 import type { Metadata } from "next";
+import Link from "next/link";
+
+// Ensure this page is pre-rendered at build time
+export const dynamic = "force-static";
 
 export const metadata: Metadata = {
   title: "About",
   description:
     "What Free Quick Calculator is, our mission, and how to reach us.",
+  alternates: { canonical: "/about" },
+  openGraph: {
+    type: "website",
+    title: "About | Free Quick Calculator",
+    description:
+      "What Free Quick Calculator is, our mission, and how to reach us.",
+    url: "https://freequickcalculator.com/about",
+    siteName: "Free Quick Calculator",
+  },
 };
 
 export default function AboutPage() {
   return (
-    <section className="prose max-w-none">
+    <section className="prose prose-slate max-w-none">
       <h1>About Free Quick Calculator</h1>
       <p>
         Free Quick Calculator is a fast, mobile-first hub of everyday calculators
@@ -21,15 +34,15 @@ export default function AboutPage() {
       <ul>
         <li>Finance tools (EMI, SIP, Compound Interest, Break-even, etc.)</li>
         <li>Health tools (BMI, BMR, Body Fat %, Daily Calories, etc.)</li>
-        <li>Utilities & conversions (discount, percentage, date diff, and more)</li>
-        <li>Searchable hub with clean, ad-light experience</li>
+        <li>Utilities &amp; conversions (discount, percentage, date diff, and more)</li>
+        <li>Searchable hub with a clean, ad-light experience</li>
       </ul>
 
-      <h2>Privacy & consent</h2>
+      <h2>Privacy &amp; consent</h2>
       <p>
         We use a Google-certified consent banner (CookieYes) in EEA/UK/CH and
         keep ads/analytics off until you choose. See our{" "}
-        <a href="/privacy">Privacy Policy</a> for details.
+        <Link href="/privacy">Privacy Policy</Link> for details.
       </p>
 
       <h2>Contact</h2>
