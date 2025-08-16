@@ -20,11 +20,10 @@ export const metadata: Metadata = {
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
   robots: { index: true, follow: true },
-  // AdSense site verification meta
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
-// ✅ viewport must be a separate export (not inside metadata)
+// ✅ viewport must be a separate export
 export const viewport: Viewport = {
   width: "device-width",
   initialScale: 1,
@@ -61,7 +60,6 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script id="gtag-config" strategy="beforeInteractive">
               {`
                 gtag('js', new Date());
-                // Don't auto-send page_view; we control it on route change & consent
                 gtag('config', '${GA_ID}', {
                   send_page_view: false,
                   anonymize_ip: true,
@@ -90,11 +88,14 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Navbar />
         <main className="py-8">
-          <Container>{children}</Container>
+          {/* ⬇️ This Suspense fixes the CSR bailout on every page using useSearchParams */}
+          <Suspense fallback={null}>
+            <Container>{children}</Container>
+          </Suspense>
         </main>
         <Footer />
 
-        {/* ✅ Wrap GA4PageView (uses useSearchParams) in Suspense */}
+        {/* GA4 page_view (also uses router hooks) */}
         <Suspense fallback={null}>
           <GA4PageView />
         </Suspense>
