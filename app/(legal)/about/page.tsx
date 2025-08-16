@@ -1,5 +1,7 @@
 // app/(legal)/about/page.tsx
-export const metadata = {
+import type { Metadata } from "next";
+
+export const metadata: Metadata = {
   title: "About",
   description:
     "What Free Quick Calculator is, our mission, and how to reach us.",
@@ -32,8 +34,8 @@ export default function AboutPage() {
 
       <h2>Contact</h2>
       <p>
-        Feedback or ideas? Email us at <a href="mailto:your@email.com">
-        your@email.com</a>.
+        Feedback or ideas? Email us at{" "}
+        <a href="mailto:dhaneshkmd82@gmail.com">dhaneshkmd82@gmail.com</a>.
       </p>
     </section>
   );
