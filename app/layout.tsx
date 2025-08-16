@@ -4,6 +4,8 @@ import "../styles/globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
 import Container from "../components/Container";
+import { Analytics } from "@vercel/analytics/react";
+import { SpeedInsights } from "@vercel/speed-insights/next";
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://freequickcalculator.com"),
@@ -54,6 +56,10 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Container>{children}</Container>
         </main>
         <Footer />
+
+        {/* Vercel Analytics (cookieless) & Speed Insights */}
+        <Analytics />
+        <SpeedInsights />
       </body>
     </html>
   );
