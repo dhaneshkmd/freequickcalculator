@@ -1,22 +1,16 @@
-import Link from "next/link";
-import Container from "./Container";
-
+// components/Footer.tsx (excerpt)
 export default function Footer() {
   return (
     <footer className="border-t bg-white">
-      <Container>
-        <div className="py-6 flex flex-col items-center gap-2 text-sm text-gray-600 md:flex-row md:justify-between">
-          <div>
-            © {new Date().getFullYear()} Free Quick Calculator. Built with Next.js + Tailwind.
-          </div>
-
-          <nav className="flex flex-wrap items-center gap-4">
-            <Link href="/privacy" className="hover:underline">Privacy</Link>
-            <Link href="/terms" className="hover:underline">Terms</Link>
-            <Link href="/contact" className="hover:underline">Contact</Link>
-          </nav>
-        </div>
-      </Container>
+      <div className="mx-auto max-w-5xl px-4 py-6 flex flex-col md:flex-row md:items-center md:justify-between gap-4">
+        <p className="text-sm text-gray-500">© {new Date().getFullYear()} Free Quick Calculator</p>
+        <nav className="text-sm text-gray-600 flex flex-wrap gap-4">
+          <a href="/about">About</a>
+          <a href="/privacy">Privacy</a>
+          <a href="/terms">Terms</a>
+          <a href="/contact">Contact</a>
+        </nav>
+      </div>
     </footer>
   );
 }
