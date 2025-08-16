@@ -7,7 +7,7 @@ import Footer from "../components/Footer";
 import Container from "../components/Container";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
-import GA4PageView from "../components/GA4PageView"; // ← add this import
+import GA4PageView from "../components/GA4PageView";
 
 // GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
