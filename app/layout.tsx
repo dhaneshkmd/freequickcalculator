@@ -16,7 +16,7 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
   viewport: "width=device-width, initial-scale=1",
   robots: { index: true, follow: true },
-  // ✅ AdSense meta-tag verification
+  // AdSense site verification
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
@@ -24,7 +24,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 antialiased">
-        {/* Consent Mode v2 defaults: deny until user chooses (CMP will update) */}
+        {/* 1) Consent Mode v2 defaults (gtag defined once here) */}
         <Script id="consent-mode-defaults" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -40,14 +40,29 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* CookieYes CMP (live ID) */}
+        {/* 2) Google tag (GA4) runtime so CookieYes can send consent pings */}
+        {/* 👉 Replace G-XXXXXXXXXX with your GA4 Measurement ID */}
+        <Script
+          id="gtag-js"
+          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
+          strategy="beforeInteractive"
+        />
+        <Script id="gtag-config" strategy="beforeInteractive">
+          {`
+            gtag('js', new Date());
+            // Don't auto send page_view; wait for consent
+            gtag('config', 'G-XXXXXXXXXX', { send_page_view: false, anonymize_ip: true });
+          `}
+        </Script>
+
+        {/* 3) CookieYes CMP */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
           strategy="beforeInteractive"
         />
 
-        {/* Google AdSense loader — in <head> for crawler visibility */}
+        {/* 4) AdSense loader */}
         <Script
           id="adsense-loader"
           strategy="beforeInteractive"
@@ -62,7 +77,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         </main>
         <Footer />
 
-        {/* Vercel Analytics (cookieless) & Speed Insights */}
+        {/* Cookieless measurements */}
         <Analytics />
         <SpeedInsights />
       </body>
