@@ -7,6 +7,7 @@ import Footer from "../components/Footer";
 import Container from "../components/Container";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
+import GA4PageView from "../components/GA4PageView"; // ← add this import
 
 // GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
@@ -54,36 +55,12 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script id="gtag-config" strategy="beforeInteractive">
               {`
                 gtag('js', new Date());
-                // Don't auto-send page_view; we'll send it after consent
-                gtag('config', '${GA_ID}', { send_page_view: false, anonymize_ip: true });
-              `}
-            </Script>
-
-            {/* Bridge: fire page_view when consent becomes granted (and once on load) */}
-            <Script id="ga4-pageview-after-consent" strategy="afterInteractive">
-              {`
-                (function () {
-                  function sendPV() {
-                    try {
-                      gtag('event', 'page_view', {
-                        page_title: document.title,
-                        page_location: location.href,
-                        page_path: location.pathname
-                      });
-                    } catch (e) {}
-                  }
-
-                  // Send once on load (Consent Mode will drop it if still denied)
-                  if (document.readyState !== 'loading') {
-                    sendPV();
-                  } else {
-                    window.addEventListener('DOMContentLoaded', sendPV);
-                  }
-
-                  // Send again when the user accepts/updates consent via CookieYes
-                  window.addEventListener('cookieyes_consent_update', sendPV);
-                  window.addEventListener('cookieyes_consent_accept', sendPV);
-                })();
+                // Don't auto-send page_view; we control it on route change & consent
+                gtag('config', '${GA_ID}', {
+                  send_page_view: false,
+                  anonymize_ip: true,
+                  debug_mode: ${process.env.NODE_ENV !== "production"}
+                });
               `}
             </Script>
           </>
@@ -110,6 +87,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           <Container>{children}</Container>
         </main>
         <Footer />
+
+        {/* GA4 page_view: initial + route changes + on consent update */}
+        <GA4PageView />
 
         {/* Cookieless measurements */}
         <Analytics />
