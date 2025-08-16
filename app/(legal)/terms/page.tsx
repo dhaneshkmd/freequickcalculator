@@ -33,7 +33,7 @@ export default function TermsPage() {
 
       <h2>Contact</h2>
       <p>
-        Email: <a href="mailto:contact@freequickcalculator.com">contact@freequickcalculator.com</a>
+        Email: <a href="mailto:dhaneshkmd82@gmail.com">dhaneshkmd82@gmail.com</a>
       </p>
     </main>
   );
