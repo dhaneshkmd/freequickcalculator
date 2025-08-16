@@ -8,6 +8,9 @@ import Container from "../components/Container";
 import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 
+// Read GA4 ID from env to avoid hard-coding (set in Vercel as NEXT_PUBLIC_GA_ID)
+const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
+
 export const metadata: Metadata = {
   metadataBase: new URL("https://freequickcalculator.com"),
   title: { default: "Free Quick Calculator", template: "%s | Free Quick Calculator" },
@@ -16,7 +19,7 @@ export const metadata: Metadata = {
   icons: { icon: "/favicon.ico" },
   viewport: "width=device-width, initial-scale=1",
   robots: { index: true, follow: true },
-  // AdSense site verification
+  // AdSense site verification meta
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
@@ -24,7 +27,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 antialiased">
-        {/* 1) Consent Mode v2 defaults (gtag defined once here) */}
+        {/* 1) Consent Mode v2 defaults */}
         <Script id="consent-mode-defaults" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -40,20 +43,23 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* 2) Google tag (GA4) runtime so CookieYes can send consent pings */}
-        {/* 👉 Replace G-XXXXXXXXXX with your GA4 Measurement ID */}
-        <Script
-          id="gtag-js"
-          src="https://www.googletagmanager.com/gtag/js?id=G-XXXXXXXXXX"
-          strategy="beforeInteractive"
-        />
-        <Script id="gtag-config" strategy="beforeInteractive">
-          {`
-            gtag('js', new Date());
-            // Don't auto send page_view; wait for consent
-            gtag('config', 'G-XXXXXXXXXX', { send_page_view: false, anonymize_ip: true });
-          `}
-        </Script>
+        {/* 2) Google tag (GA4) runtime — only if GA_ID is set */}
+        {GA_ID ? (
+          <>
+            <Script
+              id="gtag-js"
+              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
+              strategy="beforeInteractive"
+            />
+            <Script id="gtag-config" strategy="beforeInteractive">
+              {`
+                gtag('js', new Date());
+                // Don't auto-send page_view; wait for consent
+                gtag('config', '${GA_ID}', { send_page_view: false, anonymize_ip: true });
+              `}
+            </Script>
+          </>
+        ) : null}
 
         {/* 3) CookieYes CMP */}
         <Script
