@@ -1,3 +1,4 @@
+// app/calculator/[slug]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { calculators, getCalculatorBySlug } from "../../../data/calculators";
@@ -44,6 +45,12 @@ import Tip from "../../../components/calculators/Tip";
 import UnitLength from "../../../components/calculators/UnitLength";
 import UnitTemp from "../../../components/calculators/UnitTemp";
 import UnitWeight from "../../../components/calculators/UnitWeight";
+
+// ✅ New Finance calculators
+import Retirement from "../../../components/calculators/RetirementCalculator";
+import InvestVsFD from "../../../components/calculators/InvestVsFD";
+import CreditCardPayoff from "../../../components/calculators/CreditCardPayoff";
+import TaxBracket from "../../../components/calculators/TaxBracket";
 
 type Props = { params: { slug: string } };
 
@@ -97,11 +104,17 @@ export default function CalculatorPage({ params }: Props) {
       case "SAVINGS_GOAL": return <SavingsGoal />;
       case "SIMPLE_INTEREST": return <SimpleInterest />;
 
+      // ✅ New Finance (this release)
+      case "RETIREMENT": return <Retirement />;
+      case "INVEST_VS_FD": return <InvestVsFD />;
+      case "CC_PAYOFF": return <CreditCardPayoff />;
+
       // Tax / Pricing
       case "GST_VAT": return <GSTVat />;
       case "SALES_TAX": return <SalesTax />;
       case "DISCOUNT": return <Discount />;
       case "TAX_INDIA": return <TaxIndia />;
+      case "TAX_BRACKET": return <TaxBracket />;
 
       // Utilities & Conversions
       case "PERCENTAGE": return <Percentage />;
