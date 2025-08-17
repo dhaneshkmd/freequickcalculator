@@ -1,3 +1,4 @@
+// data/calculators.ts
 export type Category =
   'Finance' | 'Health' | 'Utilities' | 'Conversions' | 'Tax' | 'Dates & Time' | 'Lifestyle';
 
@@ -10,6 +11,8 @@ export type ComponentId =
   // newly activated
   'MORTGAGE' | 'PERCENTAGE' | 'DUE_DATE' | 'RD' | 'ROI' | 'SALES_TAX' | 'SAVINGS_GOAL' |
   'SIMPLE_INTEREST' | 'TIME_ZONE' | 'TIP' | 'UNIT_LENGTH' | 'UNIT_TEMP' | 'UNIT_WEIGHT' |
+  // ✅ newly added
+  'RETIREMENT' | 'INVEST_VS_FD' | 'CC_PAYOFF' | 'TAX_BRACKET' |
   null;
 
 export type Calculator = {
@@ -44,6 +47,11 @@ export const calculators: Calculator[] = [
   { name:"Savings Goal", slug:"savings-goal", description:"Monthly saving needed for a goal.", category:"Finance", keywords:["goal","savings"], status:"ready", componentId:"SAVINGS_GOAL", formulaNote:"PMT = FV*i / ((1+i)^n − 1)" },
   { name:"Currency Converter", slug:"currency-converter", description:"Convert amounts across currencies.", category:"Finance", keywords:["forex","currency"], status:"ready", componentId:"CURRENCY" },
 
+  // ✅ NEW — Finance
+  { name:"Retirement Calculator", slug:"retirement", description:"Plan future corpus and sustainable monthly income.", category:"Finance", keywords:["retirement","corpus","pension","goal"], status:"ready", componentId:"RETIREMENT", formulaNote:"FV of current savings + FV of series; income via annuity PMT." },
+  { name:"Investment vs. FD", slug:"invest-vs-fd", description:"Compare expected returns vs bank fixed deposits.", category:"Finance", keywords:["fd","lumpsum","comparison"], status:"ready", componentId:"INVEST_VS_FD", formulaNote:"A = P(1+r/m)^(m·t) for both options; difference = A₁ − A₂." },
+  { name:"Credit Card Payoff", slug:"cc-payoff", description:"Time & total interest to clear credit card dues.", category:"Finance", keywords:["credit card","debt","payoff"], status:"ready", componentId:"CC_PAYOFF", formulaNote:"n = −ln(1 − rB/P)/ln(1+r); or PMT for target months." },
+
   { name:"BMR", slug:"bmr", description:"Basal Metabolic Rate estimate.", category:"Health", keywords:["metabolism","calorie"], status:"ready", componentId:"BMR", formulaNote:"Mifflin–St Jeor" },
   { name:"Body Fat %", slug:"body-fat", description:"Body fat estimation.", category:"Health", keywords:["fat","composition"], status:"ready", componentId:"BODY_FAT", formulaNote:"U.S. Navy method" },
   { name:"Daily Calorie Needs", slug:"daily-calories", description:"Maintenance calories per day.", category:"Health", keywords:["tdee","calories"], status:"ready", componentId:"DAILY_CALORIES", formulaNote:"TDEE = BMR × activity" },
@@ -61,6 +69,8 @@ export const calculators: Calculator[] = [
   { name:"GST / VAT", slug:"gst-vat", description:"Add or remove GST/VAT.", category:"Tax", keywords:["gst","vat","tax"], status:"ready", componentId:"GST_VAT", formulaNote:"Add: total = base×(1+r). Remove: base = total/(1+r)" },
   { name:"Income Tax (India)", slug:"income-tax-india", description:"Estimate income tax slabs.", category:"Tax", keywords:["tax","india"], status:"ready", componentId:"TAX_INDIA", formulaNote:"New Regime slabs + 4% cess (FY 2024–25 approx.)" },
   { name:"Sales Tax", slug:"sales-tax", description:"Price with sales tax.", category:"Tax", keywords:["sales","tax"], status:"ready", componentId:"SALES_TAX" },
+  // ✅ NEW — Tax
+  { name:"Tax Bracket (Global)", slug:"tax-bracket", description:"Progressive tax estimator with US/UK/India/Gulf presets.", category:"Tax", keywords:["tax","bracket","us","uk","india","gulf"], status:"ready", componentId:"TAX_BRACKET", formulaNote:"Tax = Σ slice×rate on taxable (income − allowance)." },
 
   { name:"Date Difference", slug:"date-diff", description:"Days between dates.", category:"Dates & Time", keywords:["date","difference"], status:"ready", componentId:"DATE_DIFF" },
   { name:"Time Zone Converter", slug:"time-zone", description:"Convert across time zones.", category:"Dates & Time", keywords:["time","zone","utc"], status:"ready", componentId:"TIME_ZONE" },
