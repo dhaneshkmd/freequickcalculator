@@ -1,9 +1,10 @@
 // app/sitemap.ts
 import type { MetadataRoute } from "next";
-// ⛔ Old (causes Module not found in Vercel build)
+
+// ❌ remove this
 // import { calculators } from "@/data/calculators";
 
-// ✅ Use a relative import from app/ → ../data/
+// ✅ use a relative path (works reliably in metadata routes)
 import { calculators } from "../data/calculators";
 
 export default function sitemap(): MetadataRoute.Sitemap {
@@ -17,7 +18,7 @@ export default function sitemap(): MetadataRoute.Sitemap {
     { url: `${base}/terms`, changefreq: "yearly", priority: 0.4 },
   ];
 
-  const calcRoutes: MetadataRoute.Sitemap = calculators
+  const calcRoutes = calculators
     .filter((c) => c.status === "ready")
     .map((c) => ({
       url: `${base}/calculator/${c.slug}`,
