@@ -1,23 +1,28 @@
 // app/sitemap.ts
 import type { MetadataRoute } from "next";
-import { calculators } from "../data/calculators"; // ← change from '@/data/calculators'
+// ⛔ Old (causes Module not found in Vercel build)
+// import { calculators } from "@/data/calculators";
 
-const BASE_URL = "https://freequickcalculator.com";
+// ✅ Use a relative import from app/ → ../data/
+import { calculators } from "../data/calculators";
 
 export default function sitemap(): MetadataRoute.Sitemap {
+  const base = "https://freequickcalculator.com";
+
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${BASE_URL}/`, lastModified: new Date() },
-    { url: `${BASE_URL}/about`, lastModified: new Date() },
-    { url: `${BASE_URL}/contact`, lastModified: new Date() },
-    { url: `${BASE_URL}/privacy`, lastModified: new Date() },
-    { url: `${BASE_URL}/terms`, lastModified: new Date() },
+    { url: `${base}/`, changefreq: "weekly", priority: 1 },
+    { url: `${base}/about`, changefreq: "monthly", priority: 0.6 },
+    { url: `${base}/contact`, changefreq: "monthly", priority: 0.6 },
+    { url: `${base}/privacy`, changefreq: "yearly", priority: 0.4 },
+    { url: `${base}/terms`, changefreq: "yearly", priority: 0.4 },
   ];
 
   const calcRoutes: MetadataRoute.Sitemap = calculators
     .filter((c) => c.status === "ready")
     .map((c) => ({
-      url: `${BASE_URL}/calculator/${c.slug}`,
-      lastModified: new Date(),
+      url: `${base}/calculator/${c.slug}`,
+      changefreq: "weekly",
+      priority: 0.8,
     }));
 
   return [...staticRoutes, ...calcRoutes];
