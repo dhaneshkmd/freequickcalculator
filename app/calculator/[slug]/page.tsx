@@ -3,6 +3,7 @@ import type { Metadata } from "next";
 import { notFound } from "next/navigation";
 import { calculators, getCalculatorBySlug } from "../../../data/calculators";
 import ComingSoon from "../../../components/ComingSoon";
+import type { ComponentType } from "react";
 
 // Existing calculators
 import BMI from "../../../components/calculators/BMI";
@@ -46,7 +47,7 @@ import UnitLength from "../../../components/calculators/UnitLength";
 import UnitTemp from "../../../components/calculators/UnitTemp";
 import UnitWeight from "../../../components/calculators/UnitWeight";
 
-// ✅ New Finance calculators
+// ✅ New Finance calculators (this release)
 import Retirement from "../../../components/calculators/RetirementCalculator";
 import InvestVsFD from "../../../components/calculators/InvestVsFD";
 import CreditCardPayoff from "../../../components/calculators/CreditCardPayoff";
@@ -64,6 +65,7 @@ export function generateStaticParams() {
 export function generateMetadata({ params }: Props): Metadata {
   const calc = getCalculatorBySlug(params.slug);
   if (!calc) return { title: "Calculator", description: "Calculator not found." };
+
   return {
     title: calc.name,
     description: calc.description,
@@ -71,82 +73,89 @@ export function generateMetadata({ params }: Props): Metadata {
   };
 }
 
+// Map every ComponentId → component (keeps TS safe and avoids a giant switch)
+const componentMap: Record<
+  Exclude<
+    import("../../../data/calculators").ComponentId,
+    null
+  >,
+  ComponentType<any>
+> = {
+  // Core
+  BMI,
+  EMI,
+  SIP,
+  AGE: Age,
+
+  // Health
+  BMR,
+  BODY_FAT: BodyFat,
+  DAILY_CALORIES: DailyCalories,
+  CALORIES_BURNED: CaloriesBurned,
+  DUE_DATE: DueDate,
+
+  // Finance
+  BREAK_EVEN: BreakEven,
+  COMPOUND_INTEREST: CompoundInterest,
+  CURRENCY: CurrencyConverter,
+  FD,
+  HOME_AFFORD: HomeAfford,
+  INFLATION_REAL: InflationReal,
+  LOAN_COMPARE: LoanCompare,
+  LOAN_ELIGIBILITY: LoanEligibility,
+  MORTGAGE: Mortgage,
+  ROI,
+  SAVINGS_GOAL: SavingsGoal,
+  SIMPLE_INTEREST: SimpleInterest,
+
+  // ✅ New Finance (this release)
+  RETIREMENT: Retirement,
+  INVEST_VS_FD: InvestVsFD,
+  CC_PAYOFF: CreditCardPayoff,
+
+  // Tax / Pricing
+  GST_VAT: GSTVat,
+  SALES_TAX: SalesTax,
+  DISCOUNT: Discount,
+  TAX_INDIA: TaxIndia,
+  TAX_BRACKET: TaxBracket,
+
+  // Utilities & Conversions
+  PERCENTAGE: Percentage,
+  TIME_ZONE: TimeZone,
+  TIP: Tip,
+  UNIT_LENGTH: UnitLength,
+  UNIT_TEMP: UnitTemp,
+  UNIT_WEIGHT: UnitWeight,
+
+  // Dates & Time
+  DATE_DIFF: DateDiff,
+  LEAP_YEAR: LeapYear,
+};
+
 export default function CalculatorPage({ params }: Props) {
   const calc = getCalculatorBySlug(params.slug);
-  if (!calc) notFound();
-
-  function render() {
-    switch (calc!.componentId) {
-      // Core
-      case "BMI": return <BMI />;
-      case "EMI": return <EMI />;
-      case "SIP": return <SIP />;
-      case "AGE": return <Age />;
-
-      // Health
-      case "BMR": return <BMR />;
-      case "BODY_FAT": return <BodyFat />;
-      case "DAILY_CALORIES": return <DailyCalories />;
-      case "CALORIES_BURNED": return <CaloriesBurned />;
-      case "DUE_DATE": return <DueDate />;
-
-      // Finance
-      case "BREAK_EVEN": return <BreakEven />;
-      case "COMPOUND_INTEREST": return <CompoundInterest />;
-      case "CURRENCY": return <CurrencyConverter />;
-      case "FD": return <FD />;
-      case "HOME_AFFORD": return <HomeAfford />;
-      case "INFLATION_REAL": return <InflationReal />;
-      case "LOAN_COMPARE": return <LoanCompare />;
-      case "LOAN_ELIGIBILITY": return <LoanEligibility />;
-      case "MORTGAGE": return <Mortgage />;
-      case "ROI": return <ROI />;
-      case "SAVINGS_GOAL": return <SavingsGoal />;
-      case "SIMPLE_INTEREST": return <SimpleInterest />;
-
-      // ✅ New Finance (this release)
-      case "RETIREMENT": return <Retirement />;
-      case "INVEST_VS_FD": return <InvestVsFD />;
-      case "CC_PAYOFF": return <CreditCardPayoff />;
-
-      // Tax / Pricing
-      case "GST_VAT": return <GSTVat />;
-      case "SALES_TAX": return <SalesTax />;
-      case "DISCOUNT": return <Discount />;
-      case "TAX_INDIA": return <TaxIndia />;
-      case "TAX_BRACKET": return <TaxBracket />;
-
-      // Utilities & Conversions
-      case "PERCENTAGE": return <Percentage />;
-      case "TIME_ZONE": return <TimeZone />;
-      case "TIP": return <Tip />;
-      case "UNIT_LENGTH": return <UnitLength />;
-      case "UNIT_TEMP": return <UnitTemp />;
-      case "UNIT_WEIGHT": return <UnitWeight />;
-
-      // Dates & Time
-      case "DATE_DIFF": return <DateDiff />;
-      case "LEAP_YEAR": return <LeapYear />;
-
-      default:
-        return (
-          <ComingSoon
-            title={`${calc!.name} — Coming Soon`}
-            description={calc!.description}
-          />
-        );
-    }
+  if (!calc) {
+    notFound();
   }
+
+  const Component =
+    calc.componentId ? componentMap[calc.componentId] : undefined;
 
   return (
     <div className="space-y-6">
       <header className="space-y-2">
-        <h1 className="text-3xl font-bold tracking-tight">{calc!.name}</h1>
-        {calc?.formulaNote && (
+        <h1 className="text-3xl font-bold tracking-tight">{calc.name}</h1>
+        {calc.formulaNote && (
           <p className="text-sm text-gray-500">Formula: {calc.formulaNote}</p>
         )}
       </header>
-      {render()}
+
+      {Component ? (
+        <Component />
+      ) : (
+        <ComingSoon title={`${calc.name} — Coming Soon`} description={calc.description} />
+      )}
     </div>
   );
 }
