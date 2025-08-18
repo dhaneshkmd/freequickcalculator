@@ -75,10 +75,7 @@ export function generateMetadata({ params }: Props): Metadata {
 
 // Map every ComponentId → component (keeps TS safe and avoids a giant switch)
 const componentMap: Record<
-  Exclude<
-    import("../../../data/calculators").ComponentId,
-    null
-  >,
+  Exclude<import("../../../data/calculators").ComponentId, null>,
   ComponentType<any>
 > = {
   // Core
@@ -99,6 +96,7 @@ const componentMap: Record<
   COMPOUND_INTEREST: CompoundInterest,
   CURRENCY: CurrencyConverter,
   FD,
+  RD, // ← added
   HOME_AFFORD: HomeAfford,
   INFLATION_REAL: InflationReal,
   LOAN_COMPARE: LoanCompare,
@@ -135,12 +133,9 @@ const componentMap: Record<
 
 export default function CalculatorPage({ params }: Props) {
   const calc = getCalculatorBySlug(params.slug);
-  if (!calc) {
-    notFound();
-  }
+  if (!calc) notFound();
 
-  const Component =
-    calc.componentId ? componentMap[calc.componentId] : undefined;
+  const Component = calc.componentId ? componentMap[calc.componentId] : undefined;
 
   return (
     <div className="space-y-6">
@@ -154,7 +149,10 @@ export default function CalculatorPage({ params }: Props) {
       {Component ? (
         <Component />
       ) : (
-        <ComingSoon title={`${calc.name} — Coming Soon`} description={calc.description} />
+        <ComingSoon
+          title={`${calc.name} — Coming Soon`}
+          description={calc.description}
+        />
       )}
     </div>
   );
