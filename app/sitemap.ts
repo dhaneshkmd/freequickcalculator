@@ -1,27 +1,23 @@
 // app/sitemap.ts
 import type { MetadataRoute } from "next";
-
-// ❌ remove this
-// import { calculators } from "@/data/calculators";
-
-// ✅ use a relative path (works reliably in metadata routes)
+// ✅ use relative path instead of "@/data/calculators"
 import { calculators } from "../data/calculators";
 
-export default function sitemap(): MetadataRoute.Sitemap {
-  const base = "https://freequickcalculator.com";
+const SITE = "https://freequickcalculator.com";
 
+export default function sitemap(): MetadataRoute.Sitemap {
   const staticRoutes: MetadataRoute.Sitemap = [
-    { url: `${base}/`, changefreq: "weekly", priority: 1 },
-    { url: `${base}/about`, changefreq: "monthly", priority: 0.6 },
-    { url: `${base}/contact`, changefreq: "monthly", priority: 0.6 },
-    { url: `${base}/privacy`, changefreq: "yearly", priority: 0.4 },
-    { url: `${base}/terms`, changefreq: "yearly", priority: 0.4 },
+    { url: `${SITE}/`, changefreq: "weekly", priority: 1 },
+    { url: `${SITE}/about`, changefreq: "monthly", priority: 0.6 },
+    { url: `${SITE}/contact`, changefreq: "monthly", priority: 0.6 },
+    { url: `${SITE}/privacy`, changefreq: "yearly", priority: 0.4 },
+    { url: `${SITE}/terms`, changefreq: "yearly", priority: 0.4 },
   ];
 
   const calcRoutes = calculators
     .filter((c) => c.status === "ready")
     .map((c) => ({
-      url: `${base}/calculator/${c.slug}`,
+      url: `${SITE}/calculator/${c.slug}`,
       changefreq: "weekly",
       priority: 0.8,
     }));
