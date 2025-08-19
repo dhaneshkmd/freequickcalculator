@@ -10,6 +10,9 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
+// ⬇️ Floating calculator (client component)
+import FloatCalc from "../components/FloatCalc";
+
 // GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
@@ -103,6 +106,9 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* Cookieless measurements */}
         <Analytics />
         <SpeedInsights />
+
+        {/* Floating calculator available site-wide */}
+        <FloatCalc />
       </body>
     </html>
   );
