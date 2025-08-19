@@ -2,6 +2,7 @@
 import type { Metadata, Viewport } from "next";
 import { Suspense } from "react";
 import Script from "next/script";
+import dynamic from "next/dynamic";
 import "../styles/globals.css";
 import Navbar from "../components/Navbar";
 import Footer from "../components/Footer";
@@ -10,8 +11,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
-// ⬇️ Floating calculator (client component)
-import FloatingCalculator from "../components/FloatingCalculator";
+// ⬇️ Lazy-load the floating calculator only on client
+const FloatingCalculator = dynamic(
+  () => import("../components/FloatingCalculator"),
+  { ssr: false }
+);
 
 // GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
