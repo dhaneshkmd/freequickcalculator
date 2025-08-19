@@ -11,11 +11,13 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
-// Lazy-load the floating calculator only on the client
-const FloatingCalculator = dynamic(() => import("../components/FloatingCalculator"), {
-  ssr: false,
-});
+// Lazy-load the floating calculator on the client only
+const FloatingCalculator = dynamic(
+  () => import("../components/FloatingCalculator"),
+  { ssr: false }
+);
 
+// GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
@@ -28,13 +30,14 @@ export const metadata: Metadata = {
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
+// ✅ viewport must be a separate export
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
       <body className="bg-gray-50 text-gray-900 antialiased">
-        {/* 1) Consent Mode v2 defaults */}
+        {/* 1) Consent Mode v2 defaults (must run before any Google tags) */}
         <Script id="consent-mode-defaults" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
@@ -50,7 +53,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* 2) Google tag (GA4) runtime — only if GA_ID is set */}
+        {/* 2) Google tag (GA4) — only if GA_ID is set */}
         {GA_ID ? (
           <>
             <Script
@@ -61,6 +64,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
             <Script id="gtag-config" strategy="beforeInteractive">
               {`
                 gtag('js', new Date());
+                // We control page_view manually (on route change + consent)
                 gtag('config', '${GA_ID}', {
                   send_page_view: false,
                   anonymize_ip: true,
@@ -71,7 +75,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         ) : null}
 
-        {/* 3) CookieYes CMP */}
+        {/* 3) CookieYes CMP (updates consent after user choice) */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
@@ -81,21 +85,24 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         {/* 4) AdSense loader */}
         <Script
           id="adsense-loader"
-          strategy="beforeInteractive"
           async
+          strategy="beforeInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117"
           crossOrigin="anonymous"
         />
 
         <Navbar />
+
         <main className="py-8">
+          {/* Wrap pages because some use router hooks/search params */}
           <Suspense fallback={null}>
             <Container>{children}</Container>
           </Suspense>
         </main>
+
         <Footer />
 
-        {/* GA4 page_view (route changes) */}
+        {/* GA4 page_view on route changes (uses router hooks) */}
         <Suspense fallback={null}>
           <GA4PageView />
         </Suspense>
@@ -104,7 +111,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <SpeedInsights />
 
-        {/* Floating calculator available site-wide */}
+        {/* Floating calculator site-wide (client-only) */}
         <FloatingCalculator />
       </body>
     </html>
