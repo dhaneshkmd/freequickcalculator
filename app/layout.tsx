@@ -11,13 +11,11 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
-// ⬇️ Lazy-load the floating calculator only on client
-const FloatingCalculator = dynamic(
-  () => import("../components/FloatingCalculator"),
-  { ssr: false }
-);
+// Lazy-load the floating calculator only on the client
+const FloatingCalculator = dynamic(() => import("../components/FloatingCalculator"), {
+  ssr: false,
+});
 
-// GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
@@ -30,11 +28,7 @@ export const metadata: Metadata = {
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
-// ✅ viewport must be a separate export
-export const viewport: Viewport = {
-  width: "device-width",
-  initialScale: 1,
-};
+export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
@@ -95,14 +89,13 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Navbar />
         <main className="py-8">
-          {/* ⬇️ This Suspense fixes the CSR bailout on every page using useSearchParams */}
           <Suspense fallback={null}>
             <Container>{children}</Container>
           </Suspense>
         </main>
         <Footer />
 
-        {/* GA4 page_view (also uses router hooks) */}
+        {/* GA4 page_view (route changes) */}
         <Suspense fallback={null}>
           <GA4PageView />
         </Suspense>
