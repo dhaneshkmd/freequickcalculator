@@ -53,6 +53,24 @@ import InvestVsFD from "../../../components/calculators/InvestVsFD";
 import CreditCardPayoff from "../../../components/calculators/CreditCardPayoff";
 import TaxBracket from "../../../components/calculators/TaxBracket";
 
+// ✅ Brand-new “daily use” tools
+import UVExposure from "../../../components/calculators/UVExposure";
+import AQIMask from "../../../components/calculators/AQIMask";
+import RainNowcast from "../../../components/calculators/RainNowcast";
+import BestLeaveTime from "../../../components/calculators/BestLeaveTime";
+import FuelRefill from "../../../components/calculators/FuelRefill";
+import DailySpend from "../../../components/calculators/DailySpend";
+import WaterIntake from "../../../components/calculators/WaterIntake";
+import Pomodoro from "../../../components/calculators/Pomodoro";
+import GoldenHour from "../../../components/calculators/GoldenHour";
+import LeavePlanner from "../../../components/calculators/LeavePlanner";
+import GrocerySwap from "../../../components/calculators/GrocerySwap";
+import CryptoHeat from "../../../components/calculators/CryptoHeat";
+import PositionRisk from "../../../components/calculators/PositionRisk";
+import EnergyCookCost from "../../../components/calculators/EnergyCookCost";
+import ImageSize from "../../../components/calculators/ImageSize";
+import PDFSize from "../../../components/calculators/PDFSize";
+
 type Props = { params: { slug: string } };
 
 // Only pre-render "ready" calculators
@@ -96,7 +114,7 @@ const componentMap: Record<
   COMPOUND_INTEREST: CompoundInterest,
   CURRENCY: CurrencyConverter,
   FD,
-  RD, // ← added
+  RD,
   HOME_AFFORD: HomeAfford,
   INFLATION_REAL: InflationReal,
   LOAN_COMPARE: LoanCompare,
@@ -129,6 +147,24 @@ const componentMap: Record<
   // Dates & Time
   DATE_DIFF: DateDiff,
   LEAP_YEAR: LeapYear,
+
+  // ✅ Brand-new daily tools
+  UV_EXPOSURE: UVExposure,
+  AQI_MASK: AQIMask,
+  RAIN_NOWCAST: RainNowcast,
+  BEST_LEAVE_TIME: BestLeaveTime,
+  FUEL_REFILL: FuelRefill,
+  DAILY_SPEND: DailySpend,
+  WATER_INTAKE: WaterIntake,
+  POMODORO: Pomodoro,
+  GOLDEN_HOUR: GoldenHour,
+  LEAVE_PLANNER: LeavePlanner,
+  GROCERY_SWAP: GrocerySwap,
+  CRYPTO_HEAT: CryptoHeat,
+  POSITION_RISK: PositionRisk,
+  ENERGY_COOK_COST: EnergyCookCost,
+  IMAGE_SIZE: ImageSize,
+  PDF_SIZE: PDFSize,
 };
 
 export default function CalculatorPage({ params }: Props) {
