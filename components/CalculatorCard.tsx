@@ -20,7 +20,6 @@ function emoji(cat: Calculator["category"]) {
 }
 
 export default function CalculatorCard({ calc }: { calc: Calculator }) {
-  // Treat as ready if it has a component OR status is 'ready'
   const isReady = calc.status === "ready" || calc.componentId !== null;
 
   return (
