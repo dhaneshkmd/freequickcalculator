@@ -1,12 +1,26 @@
+// components/CalculatorCard.tsx
 import Link from "next/link";
 import type { Calculator } from "../data/calculators";
 
 function emoji(cat: Calculator["category"]) {
-  return { Finance:"💰", Health:"💪", Utilities:"🧮", Conversions:"🔁", Tax:"🧾", "Dates & Time":"🗓️", Lifestyle:"🎯" }[cat] || "🧠";
+  const map: Partial<Record<Calculator["category"], string>> = {
+    Finance: "💰",
+    Health: "💪",
+    Utilities: "🧮",
+    Conversions: "🔁",
+    Tax: "🧾",
+    "Dates & Time": "🗓️",
+    Lifestyle: "🎯",
+    // new categories you added
+    Travel: "🧭",
+    Photography: "📸",
+    Work: "💼",
+  };
+  return map[cat] ?? "🧠";
 }
 
 export default function CalculatorCard({ calc }: { calc: Calculator }) {
-  // NEW: treat as ready if it has a component OR status is 'ready'
+  // Treat as ready if it has a component OR status is 'ready'
   const isReady = calc.status === "ready" || calc.componentId !== null;
 
   return (
