@@ -12,7 +12,10 @@ import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
 // Lazy-load the floating calculator on the client only
-const FloatingCalculator = dynamic(() => import("../components/FloatingCalculator"), { ssr: false });
+const FloatingCalculator = dynamic(
+  () => import("../components/FloatingCalculator"),
+  { ssr: false }
+);
 
 // GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
@@ -20,28 +23,19 @@ const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 export const metadata: Metadata = {
   metadataBase: new URL("https://freequickcalculator.com"),
   title: { default: "Free Quick Calculator", template: "%s | Free Quick Calculator" },
-  description: "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
+  description:
+    "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
   robots: { index: true, follow: true },
-  other: { "google-adsense-account": "ca-pub-8441641457342117" }, // also add explicit meta below
+  other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
+// ✅ viewport must be a separate export
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
     <html lang="en">
-      <head>
-        {/* --- Performance preconnects --- */}
-        <link rel="preconnect" href="https://pagead2.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://googleads.g.doubleclick.net" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://tpc.googlesyndication.com" crossOrigin="anonymous" />
-        <link rel="preconnect" href="https://www.googletagmanager.com" crossOrigin="anonymous" />
-
-        {/* AdSense verification meta (explicit for crawler reliability) */}
-        <meta name="google-adsense-account" content="ca-pub-8441641457342117" />
-      </head>
-
       <body className="bg-gray-50 text-gray-900 antialiased">
         {/* 1) Consent Mode v2 defaults (must run before any Google tags) */}
         <Script id="consent-mode-defaults" strategy="beforeInteractive">
@@ -81,16 +75,17 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           </>
         ) : null}
 
-        {/* 3) CookieYes CMP (must execute beforeInteractive so it can update consent) */}
+        {/* 3) CookieYes CMP (updates consent after user choice) */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
           strategy="beforeInteractive"
         />
 
-        {/* 4) AdSense loader (remove async when using beforeInteractive) */}
+        {/* 4) AdSense loader */}
         <Script
           id="adsense-loader"
+          async
           strategy="beforeInteractive"
           src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117"
           crossOrigin="anonymous"
@@ -99,6 +94,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Navbar />
 
         <main className="py-8">
+          {/* Wrap pages because some use router hooks/search params */}
           <Suspense fallback={null}>
             <Container>{children}</Container>
           </Suspense>
