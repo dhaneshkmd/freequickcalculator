@@ -11,13 +11,8 @@ import { Analytics } from "@vercel/analytics/react";
 import { SpeedInsights } from "@vercel/speed-insights/next";
 import GA4PageView from "../components/GA4PageView";
 
-// Lazy-load the floating calculator on the client only
-const FloatingCalculator = dynamic(
-  () => import("../components/FloatingCalculator"),
-  { ssr: false }
-);
+const FloatingCalculator = dynamic(() => import("../components/FloatingCalculator"), { ssr: false });
 
-// GA4 ID from env (set in Vercel as NEXT_PUBLIC_GA_ID)
 const GA_ID = process.env.NEXT_PUBLIC_GA_ID || "";
 
 export const metadata: Metadata = {
@@ -27,21 +22,22 @@ export const metadata: Metadata = {
     "A fast, clean hub of finance, health, and utility calculators. Free. No sign-up. Mobile friendly.",
   icons: { icon: "/favicon.ico" },
   robots: { index: true, follow: true },
+  // This produces: <meta name="google-adsense-account" content="ca-pub-...">
   other: { "google-adsense-account": "ca-pub-8441641457342117" },
 };
 
-// ✅ viewport must be a separate export
 export const viewport: Viewport = { width: "device-width", initialScale: 1 };
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
       <body className="bg-gray-50 text-gray-900 antialiased">
-        {/* 1) Consent Mode v2 defaults (must run before any Google tags) */}
+        {/* 1) Consent Mode v2 defaults — MUST run before any Google tag */}
         <Script id="consent-mode-defaults" strategy="beforeInteractive">
           {`
             window.dataLayer = window.dataLayer || [];
             function gtag(){dataLayer.push(arguments);}
+            // Default = denied until user grants via CMP
             gtag('consent', 'default', {
               ad_user_data: 'denied',
               ad_personalization: 'denied',
@@ -53,48 +49,76 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
           `}
         </Script>
 
-        {/* 2) Google tag (GA4) — only if GA_ID is set */}
-        {GA_ID ? (
-          <>
-            <Script
-              id="gtag-js"
-              src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`}
-              strategy="beforeInteractive"
-            />
-            <Script id="gtag-config" strategy="beforeInteractive">
-              {`
-                gtag('js', new Date());
-                // We control page_view manually (on route change + consent)
-                gtag('config', '${GA_ID}', {
-                  send_page_view: false,
-                  anonymize_ip: true,
-                  debug_mode: ${process.env.NODE_ENV !== "production"}
-                });
-              `}
-            </Script>
-          </>
-        ) : null}
-
-        {/* 3) CookieYes CMP (updates consent after user choice) */}
+        {/* 2) CookieYes CMP (updates consent after user's choice) */}
         <Script
           id="cookieyes"
           src="https://cdn-cookieyes.com/client_data/8a74e740342c470beb46f456/script.js"
           strategy="beforeInteractive"
         />
 
-        {/* 4) AdSense loader */}
-        <Script
-          id="adsense-loader"
-          async
-          strategy="beforeInteractive"
-          src="https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117"
-          crossOrigin="anonymous"
-        />
+        {/* 3) Bridge CookieYes → gtag Consent & conditionally load AdSense */}
+        <Script id="cookieyes-gtag-bridge" strategy="beforeInteractive">
+          {`
+            (function () {
+              // Map CookieYes categories to Consent Mode
+              function applyConsentFromCookieYes() {
+                try {
+                  var cy = (window as any).CookieYesConsent || {};
+                  var granted = (cat) => cy.accepted && cy.accepted.indexOf(cat) !== -1;
+
+                  // Update Consent Mode v2
+                  gtag('consent', 'update', {
+                    analytics_storage: granted('analytics') ? 'granted' : 'denied',
+                    ad_storage: granted('advertisement') ? 'granted' : 'denied',
+                    ad_user_data: granted('advertisement') ? 'granted' : 'denied',
+                    ad_personalization: granted('advertisement') ? 'granted' : 'denied',
+                  });
+
+                  // Load AdSense only when ad consent is granted
+                  var shouldLoadAds = granted('advertisement');
+                  var alreadyLoaded = !!document.querySelector('script[data-adsbygoogle-loaded]');
+                  if (shouldLoadAds && !alreadyLoaded) {
+                    var s = document.createElement('script');
+                    s.async = true;
+                    s.src = 'https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client=ca-pub-8441641457342117';
+                    s.crossOrigin = 'anonymous';
+                    s.setAttribute('data-adsbygoogle-loaded', 'true');
+                    document.head.appendChild(s);
+                  }
+                } catch (e) {}
+              }
+
+              // Run once CookieYes is ready or when it updates
+              window.addEventListener('cookieyes_consent_update', applyConsentFromCookieYes);
+              document.addEventListener('cookieyes_initialized', applyConsentFromCookieYes);
+
+              // Fallback: try after page load as well
+              if (document.readyState !== 'loading') {
+                setTimeout(applyConsentFromCookieYes, 0);
+              } else {
+                document.addEventListener('DOMContentLoaded', function(){ setTimeout(applyConsentFromCookieYes, 0); });
+              }
+            })();
+          `}
+        </Script>
+
+        {/* 4) GA4 base tag (loaded early, but page_view is manual & respects consent) */}
+        {GA_ID ? (
+          <>
+            <Script id="gtag-js" src={`https://www.googletagmanager.com/gtag/js?id=${GA_ID}`} strategy="beforeInteractive" />
+            <Script id="gtag-config" strategy="beforeInteractive">
+              {`
+                gtag('js', new Date());
+                // We'll send page_view in GA4PageView after route changes AND after consent is applied
+                gtag('config', '${GA_ID}', { send_page_view: false, anonymize_ip: true, debug_mode: ${process.env.NODE_ENV !== "production"} });
+              `}
+            </Script>
+          </>
+        ) : null}
 
         <Navbar />
 
         <main className="py-8">
-          {/* Wrap pages because some use router hooks/search params */}
           <Suspense fallback={null}>
             <Container>{children}</Container>
           </Suspense>
@@ -102,7 +126,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
 
         <Footer />
 
-        {/* GA4 page_view on route changes (uses router hooks) */}
+        {/* GA4 page_view on route changes (your component) */}
         <Suspense fallback={null}>
           <GA4PageView />
         </Suspense>
@@ -111,7 +135,7 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
         <Analytics />
         <SpeedInsights />
 
-        {/* Floating calculator site-wide (client-only) */}
+        {/* Floating calculator site-wide */}
         <FloatingCalculator />
       </body>
     </html>
