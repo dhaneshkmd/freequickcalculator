@@ -1,4 +1,4 @@
-// data/calculatorContent.ts
+// data/calculatorContent.tsx
 import type { CalculatorContentProps } from "@/components/CalculatorContent";
 
 /**
@@ -12,7 +12,9 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
       "The Loan EMI (Equated Monthly Installment) Calculator helps you estimate a fixed monthly repayment amount for loans. It combines principal and interest over your chosen tenure, making it easier to compare lenders and plan your finances. Useful for home, car, or personal loans in India, UAE, and globally.",
     formula: (
       <>
-        EMI = (P × r × (1 + r)<sup>n</sup>) ÷ ((1 + r)<sup>n</sup> − 1)
+        EMI = (P × r × (1 + r)
+        <sup>n</sup>) ÷ ((1 + r)
+        <sup>n</sup> − 1)
       </>
     ),
     variables: [
@@ -44,7 +46,9 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
       "The BMI Calculator estimates body mass index using height and weight. It helps identify underweight, normal, overweight, and obese categories. Widely used as a quick screening tool but not a substitute for professional medical advice.",
     formula: (
       <>
-        BMI = weight(kg) ÷ [height(m)]<sup>2</sup> | BMI = 703 × weight(lb) ÷ [height(in)]<sup>2</sup>
+        BMI = weight(kg) ÷ [height(m)]
+        <sup>2</sup> &nbsp;|&nbsp; BMI = 703 × weight(lb) ÷ [height(in)]
+        <sup>2</sup>
       </>
     ),
     variables: [
@@ -55,18 +59,13 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
       description: "Weight = 70 kg, Height = 1.75 m",
       result: "BMI ≈ 22.86 (Normal)",
     },
-    useCases: [
-      "Quick self-check",
-      "Fitness/diet tracking",
-      "Education/schools",
-    ],
+    useCases: ["Quick self-check", "Fitness/diet tracking", "Education/schools"],
     faqs: [
       { q: "Is BMI a diagnosis?", a: "No. It’s a screening tool only." },
       { q: "What are BMI ranges?", a: "Under 18.5, 18.5–24.9, 25–29.9, 30+." },
       { q: "Metric & US units?", a: "Yes, kg/cm and lb/in are supported." },
     ],
-    disclaimer:
-      "Informational only. Consult a doctor for personal health guidance.",
+    disclaimer: "Informational only. Consult a doctor for personal health guidance.",
   },
 
   sip: {
@@ -75,7 +74,8 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
       "SIP is a disciplined way to invest a fixed amount regularly in mutual funds. This calculator projects maturity values using compounding, helping plan long-term goals like retirement or education.",
     formula: (
       <>
-        FV = P × [( (1 + r/n)<sup>n×t</sup> − 1 ) ÷ (r/n)] × (1 + r/n)
+        FV = P × [((1 + r/n)
+        <sup>n×t</sup> − 1) ÷ (r/n)] × (1 + r/n)
       </>
     ),
     variables: [
@@ -88,11 +88,7 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
       description: "₹5,000/month, r = 12% p.a., t = 10 years",
       result: "Future Value ≈ ₹11.6 lakhs",
     },
-    useCases: [
-      "Retirement planning",
-      "Child education fund",
-      "Wealth creation",
-    ],
+    useCases: ["Retirement planning", "Child education fund", "Wealth creation"],
     faqs: [
       { q: "Are SIP returns guaranteed?", a: "No. Returns depend on market performance." },
       { q: "Change SIP amount later?", a: "Usually yes; check with your fund." },
