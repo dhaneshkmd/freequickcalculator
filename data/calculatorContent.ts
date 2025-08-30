@@ -6,7 +6,8 @@ import type { CalculatorContentProps } from "@/components/CalculatorContent";
  * Keyed by slug (matching calculators[].slug). Kept as *strings* so .ts compiles.
  */
 export const calculatorContent: Record<string, CalculatorContentProps> = {
-  // ---- EXISTING ----
+  // ---- CORE (existing 10 and more) ----
+
   emi: {
     title: "Loan EMI Calculator",
     intro:
@@ -74,8 +75,6 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
     ],
     disclaimer: "Informational only. Investments are subject to market risks.",
   },
-
-  // ---- NEW ADDITIONS ----
 
   percentage: {
     title: "Percentage Calculator",
@@ -198,5 +197,159 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
     useCases: ["Marketing campaigns", "Projects", "Investments"],
     faqs: [{ q: "Include fees/taxes?", a: "For true ROI, include all costs." }],
     disclaimer: "Informational only.",
+  },
+
+  // ---- NEW 10 (added now) ----
+
+  "simple-interest": {
+    title: "Simple Interest Calculator",
+    intro: "Calculate basic interest without compounding. Common in short-term loans, education loans, and informal lending.",
+    formula: "I = P × r × t",
+    variables: [
+      { symbol: "P", meaning: "Principal amount" },
+      { symbol: "r", meaning: "Annual interest rate (decimal)" },
+      { symbol: "t", meaning: "Time in years" },
+    ],
+    example: {
+      description: "₹20,000 at 10% for 2 years",
+      result: "Interest = 20,000 × 0.10 × 2 = ₹4,000",
+    },
+    useCases: ["Education loans", "Short-term borrowings", "Quick finance math"],
+    faqs: [
+      { q: "When is simple interest used?", a: "Usually for short-term or informal loans." },
+      { q: "Is it cheaper?", a: "Yes, compared to compounding, it grows slower." },
+    ],
+    disclaimer: "For quick estimates only.",
+  },
+
+  fd: {
+    title: "Fixed Deposit (FD) Calculator",
+    intro: "Estimate maturity amount of bank fixed deposits with compounding. Helps compare different bank FD options.",
+    formula: "A = P × (1 + r/n)^(n×t)",
+    variables: [
+      { symbol: "P", meaning: "Deposit amount" },
+      { symbol: "r", meaning: "Annual interest rate (decimal)" },
+      { symbol: "n", meaning: "Compounds per year" },
+      { symbol: "t", meaning: "Tenure in years" },
+    ],
+    example: {
+      description: "₹1,00,000 at 6% p.a. for 5 years (quarterly compounding)",
+      result: "Maturity ≈ ₹1,34,866",
+    },
+    useCases: ["Bank FD planning", "Safe investments", "Retirement savings"],
+    faqs: [
+      { q: "Is FD interest taxable?", a: "Yes, as per income tax rules." },
+      { q: "Do all banks compound quarterly?", a: "Mostly yes, but check terms." },
+    ],
+    disclaimer: "Confirm with your bank.",
+  },
+
+  rd: {
+    title: "Recurring Deposit (RD) Calculator",
+    intro: "Estimate maturity value of recurring monthly deposits. Useful for systematic savers.",
+    formula: "Maturity = P × [ (1 + r/n)^(nt) − 1 ] ÷ (1 − (1 + r/n)^(-1/n))",
+    variables: [
+      { symbol: "P", meaning: "Monthly installment" },
+      { symbol: "r", meaning: "Annual interest rate (decimal)" },
+      { symbol: "n", meaning: "Compounds per year" },
+      { symbol: "t", meaning: "Years" },
+    ],
+    example: {
+      description: "₹5,000 per month at 7% for 5 years",
+      result: "Maturity ≈ ₹3.6 lakhs",
+    },
+    useCases: ["Small savings", "Goal-based deposits", "Children’s education fund"],
+    faqs: [{ q: "Is RD interest same as FD?", a: "Usually yes, same bank rates apply." }],
+    disclaimer: "Figures are estimates.",
+  },
+
+  "loan-eligibility": {
+    title: "Loan Eligibility Calculator",
+    intro: "Estimate maximum loan amount you may qualify for based on income, obligations, and bank FOIR (Fixed Obligation to Income Ratio).",
+    formula: "Eligible EMI = (Net income × FOIR) − existing EMIs",
+    variables: [
+      { symbol: "Income", meaning: "Monthly net income" },
+      { symbol: "FOIR", meaning: "Bank’s fixed ratio (e.g., 50%)" },
+      { symbol: "EMI", meaning: "Existing obligations" },
+    ],
+    example: {
+      description: "Income ₹60,000, FOIR 50%, EMIs ₹10,000",
+      result: "Max EMI = ₹20,000 → Loan amount depends on tenure & rate",
+    },
+    useCases: ["Home loan planning", "Car loan limits"],
+    faqs: [{ q: "What is FOIR?", a: "Fixed Obligation to Income Ratio used by banks." }],
+    disclaimer: "Exact eligibility depends on lender policy.",
+  },
+
+  "loan-compare": {
+    title: "Loan Comparison Calculator",
+    intro: "Compare EMIs across lenders for the same loan. Useful to pick the lowest total cost.",
+    formula: "EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1)",
+    variables: [
+      { symbol: "P", meaning: "Principal" },
+      { symbol: "r", meaning: "Monthly rate" },
+      { symbol: "n", meaning: "Number of EMIs" },
+    ],
+    example: {
+      description: "Loan ₹5 lakhs, 60 months, compare 9% vs 11%",
+      result: "EMI ~₹10,378 vs ₹10,869 → ~₹29,000 saved overall",
+    },
+    useCases: ["Choosing best bank", "Refinancing decision"],
+    faqs: [{ q: "Does tenure affect savings?", a: "Yes, longer tenures magnify rate differences." }],
+    disclaimer: "Check official bank quotes.",
+  },
+
+  mortgage: {
+    title: "Mortgage Calculator",
+    intro: "Estimate monthly payments for home loans. Includes principal, interest, and amortization schedule.",
+    formula: "EMI = P × r × (1 + r)^n ÷ ((1 + r)^n − 1)",
+    variables: [
+      { symbol: "P", meaning: "Loan amount" },
+      { symbol: "r", meaning: "Monthly rate" },
+      { symbol: "n", meaning: "Number of months" },
+    ],
+    example: {
+      description: "Loan $200,000, 30 years, 6% annual",
+      result: "EMI ≈ $1,199/month",
+    },
+    useCases: ["Home purchase planning", "Refinance analysis"],
+    faqs: [{ q: "Property taxes/insurance included?", a: "This covers principal + interest only." }],
+    disclaimer: "Educational only. Consult your lender.",
+  },
+
+  "savings-goal": {
+    title: "Savings Goal Calculator",
+    intro: "Find how much you must save monthly to reach a target future amount.",
+    formula: "PMT = FV × i ÷ ((1 + i)^n − 1)",
+    variables: [
+      { symbol: "FV", meaning: "Future value (goal)" },
+      { symbol: "i", meaning: "Monthly rate (annual ÷ 12)" },
+      { symbol: "n", meaning: "Months to goal" },
+    ],
+    example: {
+      description: "Goal ₹10 lakhs in 10 years at 8%",
+      result: "Save ~₹5,168/month",
+    },
+    useCases: ["Retirement planning", "College fund", "Wealth goals"],
+    faqs: [{ q: "What if I increase deposits yearly?", a: "This calculator assumes fixed monthly savings." }],
+    disclaimer: "Approximate only.",
+  },
+
+  bmr: {
+    title: "BMR (Basal Metabolic Rate) Calculator",
+    intro: "Estimate calories burned at rest, based on age, gender, height, and weight. Basis for fitness & diet planning.",
+    formula: "Mifflin–St Jeor: Men: 10W + 6.25H − 5A + 5; Women: 10W + 6.25H − 5A − 161",
+    variables: [
+      { symbol: "W", meaning: "Weight (kg)" },
+      { symbol: "H", meaning: "Height (cm)" },
+      { symbol: "A", meaning: "Age (years)" },
+    ],
+    example: {
+      description: "Male, 70kg, 175cm, 30y",
+      result: "BMR ≈ 1,655 kcal/day",
+    },
+    useCases: ["Diet planning", "Weight management", "Fitness tracking"],
+    faqs: [{ q: "Is BMR = TDEE?", a: "No, TDEE = BMR × activity factor." }],
+    disclaimer: "Informational only. Not medical advice.",
   },
 };
