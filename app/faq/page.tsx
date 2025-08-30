@@ -1,7 +1,7 @@
 // app/faq/page.tsx
 import type { Metadata } from "next";
 
-type QA = { q: string; a: string; };
+type QA = { q: string; a: string };
 const faqs: QA[] = [
   {
     q: "Is FreeQuickCalculator a free online calculator website?",
@@ -74,24 +74,41 @@ const faqs: QA[] = [
   {
     q: "How fast are calculations and do pages load quickly?",
     a: "We optimize for speed: lightweight UI, minimal scripts, and edge caching where possible — so calculations feel instant even on mobile data."
-  },
+  }
 ];
 
 export const metadata: Metadata = {
-  title: "FAQ — FreeQuickCalculator (Free Online Calculators: EMI, BMI, Percentage, Age, GST/VAT, Unit Converter)",
+  title:
+    "FAQ | FreeQuickCalculator — Free Online Calculators (EMI, BMI, Percentage, Age, GST/VAT, Unit Converter)",
   description:
-    "FreeQuickCalculator FAQ: free online EMI calculator, BMI calculator, percentage increase/decrease, age by DOB, GST/VAT, SIP, compound interest, discount, date difference, unit converter, GPA & more.",
+    "Answers about FreeQuickCalculator: EMI, BMI, percentage, age by DOB, GST/VAT, SIP, compound interest, discount, date difference, unit converter, GPA & more.",
+  alternates: { canonical: "https://freequickcalculator.com/faq" },
+  openGraph: {
+    type: "website",
+    title:
+      "FAQ | FreeQuickCalculator — Free Online Calculators (EMI, BMI, Percentage, Age, GST/VAT)",
+    description:
+      "Frequently asked questions about our free calculators across finance, health, math, dates, and conversions.",
+    url: "https://freequickcalculator.com/faq",
+    siteName: "Free Quick Calculator"
+  },
+  twitter: {
+    card: "summary",
+    title: "FAQ | FreeQuickCalculator",
+    description:
+      "Quick answers about our free online calculators for finance, health, math, dates, and conversions."
+  }
 };
 
 export default function FAQPage() {
   const faqJsonLd = {
     "@context": "https://schema.org",
     "@type": "FAQPage",
-    "mainEntity": faqs.map((f) => ({
+    mainEntity: faqs.map((f) => ({
       "@type": "Question",
-      "name": f.q,
-      "acceptedAnswer": { "@type": "Answer", "text": f.a },
-    })),
+      name: f.q,
+      acceptedAnswer: { "@type": "Answer", text: f.a }
+    }))
   };
 
   return (
@@ -99,7 +116,7 @@ export default function FAQPage() {
       <h1 className="text-3xl font-extrabold mb-2">
         FAQ — Free Online Calculators (EMI, BMI, Percentage, Age, GST/VAT)
       </h1>
-      <p className="text-gray-600 mb-8">
+      <p className="text-gray-600 dark:text-gray-400 mb-8">
         Quick answers about our free online calculators for finance, math, health, dates, and conversions.
       </p>
 
@@ -111,21 +128,38 @@ export default function FAQPage() {
 
       <div className="space-y-3">
         {faqs.map(({ q, a }, i) => (
-          <details key={i} className="group rounded-2xl border p-4 hover:border-gray-400">
-            <summary className="cursor-pointer list-none select-none font-semibold">{q}</summary>
-            <div className="mt-2 text-gray-700 leading-relaxed" dangerouslySetInnerHTML={{ __html: linkify(a) }} />
+          <details
+            key={i}
+            className="group rounded-2xl border p-4 hover:border-gray-400 focus-within:border-gray-500 transition"
+          >
+            <summary
+              className="cursor-pointer list-none select-none font-semibold focus:outline-none focus-visible:ring-2 focus-visible:ring-blue-500 rounded"
+            >
+              {q}
+            </summary>
+            <div
+              className="mt-2 text-gray-800 dark:text-gray-200 leading-relaxed"
+              dangerouslySetInnerHTML={{ __html: linkify(a) }}
+            />
           </details>
         ))}
       </div>
 
-      <p className="text-sm text-gray-500 mt-10">
-        Didn’t find what you need? <a href="/contact" className="underline">Request a calculator</a>.
+      <p className="text-sm text-gray-500 dark:text-gray-400 mt-10">
+        Didn’t find what you need?{" "}
+        <a href="/contact" className="underline">
+          Request a calculator
+        </a>
+        .
       </p>
     </main>
   );
 }
 
-// Simple linkifier for internal paths used above
+// Strict internal-path linkifier (no external HTML injection)
 function linkify(text: string) {
-  return text.replace(/\/calculators\/[a-z0-9-]+|\/(contact|privacy)/gi, (m) => `<a class="underline" href="${m}">${m}</a>`);
+  // Only convert whitelisted internal paths to anchor tags
+  const internalPattern =
+    /(\/calculators\/[a-z0-9-]+|\/(contact|privacy|terms|about))/gi;
+  return text.replace(internalPattern, (m) => `<a class="underline" href="${m}">${m}</a>`);
 }
