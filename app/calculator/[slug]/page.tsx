@@ -5,19 +5,6 @@ import type { ComponentType } from "react";
 
 import { calculators, getCalculatorBySlug } from "@/data/calculators";
 
-// Optional: rich content (intro/formula/example/faqs/etc.)
-let calculatorContent: Record<
-  string,
-  import("@/components/CalculatorContent").CalculatorContentProps
-> | null = null;
-try {
-  // Create data/calculatorContent.ts exporting: export const calculatorContent: Record<string, CalculatorContentProps> = {...}
-  // Keys should be slugs, e.g., "emi", "bmi", ...
-  // If this file doesn't exist yet, the try/catch keeps the app working.
-  // eslint-disable-next-line @typescript-eslint/no-var-requires
-  calculatorContent = require("@/data/calculatorContent").calculatorContent;
-} catch { /* optional content not present yet */ }
-
 import ComingSoon from "@/components/ComingSoon";
 import CalculatorContent from "@/components/CalculatorContent";
 import AdSlot from "@/components/AdSlot";
@@ -90,6 +77,8 @@ import PDFSize from "@/components/calculators/PDFSize";
 
 type Props = { params: { slug: string } };
 
+const SITE = "https://freequickcalculator.com";
+
 // Only pre-render "ready" calculators
 export function generateStaticParams() {
   return calculators
@@ -107,8 +96,11 @@ export function generateMetadata({ params }: Props): Metadata {
     };
   }
 
-  const base = "https://freequickcalculator.com";
-  const url = `${base}/calculator/${calc.slug}`;
+  const url = `${SITE}/calculator/${calc.slug}`;
+
+  // If someone hits a non-ready slug directly, ask crawlers not to index it.
+  const robots =
+    calc.status !== "ready" ? { index: false, follow: true } : undefined;
 
   return {
     title: `${calc.name} | Free Quick Calculator`,
@@ -127,6 +119,7 @@ export function generateMetadata({ params }: Props): Metadata {
       title: `${calc.name} | Free Quick Calculator`,
       description: calc.description,
     },
+    robots,
   };
 }
 
@@ -206,21 +199,26 @@ const componentMap: Record<
   PDF_SIZE: PDFSize,
 };
 
-export default function CalculatorPage({ params }: Props) {
+export default async function CalculatorPage({ params }: Props) {
   const calc = getCalculatorBySlug(params.slug);
   if (!calc) return notFound();
 
   const Component = calc.componentId ? componentMap[calc.componentId] : undefined;
 
-  // If you’ve provided longform content for this slug, render the rich page
-  const content = calculatorContent ? calculatorContent[params.slug] : null;
+  // 🔽 Try to load long-form content lazily; ignore if file/slug is missing
+  let content: import("@/components/CalculatorContent").CalculatorContentProps | null = null;
+  try {
+    const mod = await import("@/data/calculatorContent");
+    content = (mod as any).calculatorContent?.[params.slug] ?? null;
+  } catch {
+    content = null;
+  }
 
   if (content) {
-    // Optionally place the interactive widget inside the rich content
     return (
       <CalculatorContent
         {...content}
-        // You can place an ad slot politely in-content (loads only after consent)
+        // Place an ad slot politely in-content (shown only after consent)
         ad={<AdSlot slot="1234567890" />} // TODO: replace with your real slot id
       >
         {Component ? <Component /> : null}
