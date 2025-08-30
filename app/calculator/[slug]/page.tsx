@@ -1,75 +1,92 @@
 // app/calculator/[slug]/page.tsx
 import type { Metadata } from "next";
 import { notFound } from "next/navigation";
-import { calculators, getCalculatorBySlug } from "../../../data/calculators";
-import ComingSoon from "../../../components/ComingSoon";
 import type { ComponentType } from "react";
 
-// Existing calculators
-import BMI from "../../../components/calculators/BMI";
-import EMI from "../../../components/calculators/EMI";
-import SIP from "../../../components/calculators/SIP";
-import Age from "../../../components/calculators/Age";
+import { calculators, getCalculatorBySlug } from "@/data/calculators";
+
+// Optional: rich content (intro/formula/example/faqs/etc.)
+let calculatorContent: Record<
+  string,
+  import("@/components/CalculatorContent").CalculatorContentProps
+> | null = null;
+try {
+  // Create data/calculatorContent.ts exporting: export const calculatorContent: Record<string, CalculatorContentProps> = {...}
+  // Keys should be slugs, e.g., "emi", "bmi", ...
+  // If this file doesn't exist yet, the try/catch keeps the app working.
+  // eslint-disable-next-line @typescript-eslint/no-var-requires
+  calculatorContent = require("@/data/calculatorContent").calculatorContent;
+} catch { /* optional content not present yet */ }
+
+import ComingSoon from "@/components/ComingSoon";
+import CalculatorContent from "@/components/CalculatorContent";
+import AdSlot from "@/components/AdSlot";
+
+// --- Existing calculators (keep your imports) ---
+import BMI from "@/components/calculators/BMI";
+import EMI from "@/components/calculators/EMI";
+import SIP from "@/components/calculators/SIP";
+import Age from "@/components/calculators/Age";
 
 // Previously added calculators
-import BMR from "../../../components/calculators/BMR";
-import BodyFat from "../../../components/calculators/BodyFat";
-import BreakEven from "../../../components/calculators/BreakEven";
-import CompoundInterest from "../../../components/calculators/CompoundInterest";
-import CurrencyConverter from "../../../components/calculators/CurrencyConverter";
-import DailyCalories from "../../../components/calculators/DailyCalories";
-import CaloriesBurned from "../../../components/calculators/CaloriesBurned";
-import DateDiff from "../../../components/calculators/DateDiff";
+import BMR from "@/components/calculators/BMR";
+import BodyFat from "@/components/calculators/BodyFat";
+import BreakEven from "@/components/calculators/BreakEven";
+import CompoundInterest from "@/components/calculators/CompoundInterest";
+import CurrencyConverter from "@/components/calculators/CurrencyConverter";
+import DailyCalories from "@/components/calculators/DailyCalories";
+import CaloriesBurned from "@/components/calculators/CaloriesBurned";
+import DateDiff from "@/components/calculators/DateDiff";
 
 // Newer batch
-import Discount from "../../../components/calculators/Discount";
-import FD from "../../../components/calculators/FD";
-import GSTVat from "../../../components/calculators/GSTVat";
-import HomeAfford from "../../../components/calculators/HomeAfford";
-import TaxIndia from "../../../components/calculators/TaxIndia";
-import InflationReal from "../../../components/calculators/InflationReal";
-import LeapYear from "../../../components/calculators/LeapYear";
-import LoanCompare from "../../../components/calculators/LoanCompare";
-import LoanEligibility from "../../../components/calculators/LoanEligibility";
+import Discount from "@/components/calculators/Discount";
+import FD from "@/components/calculators/FD";
+import GSTVat from "@/components/calculators/GSTVat";
+import HomeAfford from "@/components/calculators/HomeAfford";
+import TaxIndia from "@/components/calculators/TaxIndia";
+import InflationReal from "@/components/calculators/InflationReal";
+import LeapYear from "@/components/calculators/LeapYear";
+import LoanCompare from "@/components/calculators/LoanCompare";
+import LoanEligibility from "@/components/calculators/LoanEligibility";
 
 // Latest additions
-import Mortgage from "../../../components/calculators/Mortgage";
-import Percentage from "../../../components/calculators/Percentage";
-import DueDate from "../../../components/calculators/DueDate";
-import RD from "../../../components/calculators/RD";
-import ROI from "../../../components/calculators/ROI";
-import SalesTax from "../../../components/calculators/SalesTax";
-import SavingsGoal from "../../../components/calculators/SavingsGoal";
-import SimpleInterest from "../../../components/calculators/SimpleInterest";
-import TimeZone from "../../../components/calculators/TimeZone";
-import Tip from "../../../components/calculators/Tip";
-import UnitLength from "../../../components/calculators/UnitLength";
-import UnitTemp from "../../../components/calculators/UnitTemp";
-import UnitWeight from "../../../components/calculators/UnitWeight";
+import Mortgage from "@/components/calculators/Mortgage";
+import Percentage from "@/components/calculators/Percentage";
+import DueDate from "@/components/calculators/DueDate";
+import RD from "@/components/calculators/RD";
+import ROI from "@/components/calculators/ROI";
+import SalesTax from "@/components/calculators/SalesTax";
+import SavingsGoal from "@/components/calculators/SavingsGoal";
+import SimpleInterest from "@/components/calculators/SimpleInterest";
+import TimeZone from "@/components/calculators/TimeZone";
+import Tip from "@/components/calculators/Tip";
+import UnitLength from "@/components/calculators/UnitLength";
+import UnitTemp from "@/components/calculators/UnitTemp";
+import UnitWeight from "@/components/calculators/UnitWeight";
 
 // ✅ New Finance calculators (this release)
-import Retirement from "../../../components/calculators/RetirementCalculator";
-import InvestVsFD from "../../../components/calculators/InvestVsFD";
-import CreditCardPayoff from "../../../components/calculators/CreditCardPayoff";
-import TaxBracket from "../../../components/calculators/TaxBracket";
+import Retirement from "@/components/calculators/RetirementCalculator";
+import InvestVsFD from "@/components/calculators/InvestVsFD";
+import CreditCardPayoff from "@/components/calculators/CreditCardPayoff";
+import TaxBracket from "@/components/calculators/TaxBracket";
 
 // ✅ Brand-new “daily use” tools
-import UVExposure from "../../../components/calculators/UVExposure";
-import AQIMask from "../../../components/calculators/AQIMask";
-import RainNowcast from "../../../components/calculators/RainNowcast";
-import BestLeaveTime from "../../../components/calculators/BestLeaveTime";
-import FuelRefill from "../../../components/calculators/FuelRefill";
-import DailySpend from "../../../components/calculators/DailySpend";
-import WaterIntake from "../../../components/calculators/WaterIntake";
-import Pomodoro from "../../../components/calculators/Pomodoro";
-import GoldenHour from "../../../components/calculators/GoldenHour";
-import LeavePlanner from "../../../components/calculators/LeavePlanner";
-import GrocerySwap from "../../../components/calculators/GrocerySwap";
-import CryptoHeat from "../../../components/calculators/CryptoHeat";
-import PositionRisk from "../../../components/calculators/PositionRisk";
-import EnergyCookCost from "../../../components/calculators/EnergyCookCost";
-import ImageSize from "../../../components/calculators/ImageSize";
-import PDFSize from "../../../components/calculators/PDFSize";
+import UVExposure from "@/components/calculators/UVExposure";
+import AQIMask from "@/components/calculators/AQIMask";
+import RainNowcast from "@/components/calculators/RainNowcast";
+import BestLeaveTime from "@/components/calculators/BestLeaveTime";
+import FuelRefill from "@/components/calculators/FuelRefill";
+import DailySpend from "@/components/calculators/DailySpend";
+import WaterIntake from "@/components/calculators/WaterIntake";
+import Pomodoro from "@/components/calculators/Pomodoro";
+import GoldenHour from "@/components/calculators/GoldenHour";
+import LeavePlanner from "@/components/calculators/LeavePlanner";
+import GrocerySwap from "@/components/calculators/GrocerySwap";
+import CryptoHeat from "@/components/calculators/CryptoHeat";
+import PositionRisk from "@/components/calculators/PositionRisk";
+import EnergyCookCost from "@/components/calculators/EnergyCookCost";
+import ImageSize from "@/components/calculators/ImageSize";
+import PDFSize from "@/components/calculators/PDFSize";
 
 type Props = { params: { slug: string } };
 
@@ -82,18 +99,40 @@ export function generateStaticParams() {
 
 export function generateMetadata({ params }: Props): Metadata {
   const calc = getCalculatorBySlug(params.slug);
-  if (!calc) return { title: "Calculator", description: "Calculator not found." };
+  if (!calc) {
+    return {
+      title: "Calculator not found",
+      description: "This calculator does not exist.",
+      robots: { index: false, follow: false },
+    };
+  }
+
+  const base = "https://freequickcalculator.com";
+  const url = `${base}/calculator/${calc.slug}`;
 
   return {
-    title: calc.name,
+    title: `${calc.name} | Free Quick Calculator`,
     description: calc.description,
     keywords: calc.keywords,
+    alternates: { canonical: url },
+    openGraph: {
+      type: "website",
+      title: `${calc.name} | Free Quick Calculator`,
+      description: calc.description,
+      url,
+      siteName: "Free Quick Calculator",
+    },
+    twitter: {
+      card: "summary",
+      title: `${calc.name} | Free Quick Calculator`,
+      description: calc.description,
+    },
   };
 }
 
 // Map every ComponentId → component (keeps TS safe and avoids a giant switch)
 const componentMap: Record<
-  Exclude<import("../../../data/calculators").ComponentId, null>,
+  Exclude<import("@/data/calculators").ComponentId, null>,
   ComponentType<any>
 > = {
   // Core
@@ -169,17 +208,34 @@ const componentMap: Record<
 
 export default function CalculatorPage({ params }: Props) {
   const calc = getCalculatorBySlug(params.slug);
-  if (!calc) notFound();
+  if (!calc) return notFound();
 
   const Component = calc.componentId ? componentMap[calc.componentId] : undefined;
 
+  // If you’ve provided longform content for this slug, render the rich page
+  const content = calculatorContent ? calculatorContent[params.slug] : null;
+
+  if (content) {
+    // Optionally place the interactive widget inside the rich content
+    return (
+      <CalculatorContent
+        {...content}
+        // You can place an ad slot politely in-content (loads only after consent)
+        ad={<AdSlot slot="1234567890" />} // TODO: replace with your real slot id
+      >
+        {Component ? <Component /> : null}
+      </CalculatorContent>
+    );
+  }
+
+  // Fallback: simple header + widget (until you add content for this slug)
   return (
     <div className="space-y-6">
       <header className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">{calc.name}</h1>
-        {calc.formulaNote && (
+        {calc.formulaNote ? (
           <p className="text-sm text-gray-500">Formula: {calc.formulaNote}</p>
-        )}
+        ) : null}
       </header>
 
       {Component ? (
