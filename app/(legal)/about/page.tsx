@@ -6,48 +6,82 @@ import Link from "next/link";
 export const dynamic = "force-static";
 
 export const metadata: Metadata = {
-  title: "About",
+  title: "About Us",
   description:
-    "What Free Quick Calculator is, our mission, and how to reach us.",
-  alternates: { canonical: "/about" },
+    "Learn more about Free Quick Calculator — our mission, values, and how to reach us.",
+  alternates: { canonical: "https://freequickcalculator.com/about" },
   openGraph: {
     type: "website",
-    title: "About | Free Quick Calculator",
+    title: "About Us | Free Quick Calculator",
     description:
-      "What Free Quick Calculator is, our mission, and how to reach us.",
+      "Free Quick Calculator provides fast, accurate tools for finance, health, and everyday math. Learn about our mission and contact us.",
     url: "https://freequickcalculator.com/about",
     siteName: "Free Quick Calculator",
+  },
+  twitter: {
+    card: "summary",
+    title: "About Us | Free Quick Calculator",
+    description:
+      "Discover our mission to make everyday calculations simple and accessible to all.",
   },
 };
 
 export default function AboutPage() {
   return (
-    <section className="prose prose-slate max-w-none">
+    <section className="prose prose-slate dark:prose-invert max-w-none">
       <h1>About Free Quick Calculator</h1>
       <p>
-        Free Quick Calculator is a fast, mobile-first hub of everyday calculators
-        across finance, health, utilities and conversions. Everything runs
-        client-side — no sign-ups or downloads.
+        Free Quick Calculator is a fast, mobile-friendly hub of everyday
+        calculators across <strong>finance</strong>, <strong>health</strong>,
+        and <strong>utility conversions</strong>. Our tools run client-side,
+        require no sign-ups, and are designed to save you time.
       </p>
 
-      <h2>What we offer</h2>
+      <h2>Our Mission</h2>
+      <p>
+        Our goal is to make calculations simple, accurate, and accessible to
+        everyone — whether you’re a student, professional, or just solving
+        everyday problems. We believe in transparency, speed, and privacy.
+      </p>
+
+      <h2>What We Offer</h2>
       <ul>
-        <li>Finance tools (EMI, SIP, Compound Interest, Break-even, etc.)</li>
-        <li>Health tools (BMI, BMR, Body Fat %, Daily Calories, etc.)</li>
-        <li>Utilities &amp; conversions (discount, percentage, date diff, and more)</li>
-        <li>Searchable hub with a clean, ad-light experience</li>
+        <li>
+          <strong>Finance tools:</strong> EMI, SIP, Compound Interest,
+          Break-even analysis, and more
+        </li>
+        <li>
+          <strong>Health tools:</strong> BMI, BMR, Body Fat %, Daily Calorie
+          needs
+        </li>
+        <li>
+          <strong>Utilities &amp; Conversions:</strong> Percentage, discount,
+          date difference, and quick unit conversions
+        </li>
+        <li>
+          <strong>Simple experience:</strong> Searchable hub with a clean,
+          lightweight design
+        </li>
       </ul>
 
-      <h2>Privacy &amp; consent</h2>
+      <h2>Privacy &amp; Consent</h2>
       <p>
-        We use a Google-certified consent banner (CookieYes) in EEA/UK/CH and
-        keep ads/analytics off until you choose. See our{" "}
-        <Link href="/privacy">Privacy Policy</Link> for details.
+        We respect user privacy. Ads and analytics remain disabled until consent
+        is given via our Google-certified banner (CookieYes). See our{" "}
+        <Link href="/privacy">Privacy Policy</Link> for full details.
       </p>
 
-      <h2>Contact</h2>
+      <h2>Disclaimer</h2>
       <p>
-        Feedback or ideas? Email us at{" "}
+        Calculators are provided for <strong>informational purposes only</strong>.
+        We strive for accuracy, but results should not be treated as financial,
+        medical, or legal advice. Please consult professionals for critical
+        decisions.
+      </p>
+
+      <h2>Contact Us</h2>
+      <p>
+        Got feedback, feature requests, or partnership ideas? Reach us at{" "}
         <a href="mailto:dhaneshkmd82@gmail.com">dhaneshkmd82@gmail.com</a>.
       </p>
     </section>
