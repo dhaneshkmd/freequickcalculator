@@ -1,22 +1,18 @@
-// data/calculatorContent.tsx
+// data/calculatorContent.ts
 import type { CalculatorContentProps } from "@/components/CalculatorContent";
 
 /**
  * Long-form content for calculators (intro, formula, example, FAQs, etc.)
- * Keyed by slug (matching calculators[].slug).
+ * Keyed by slug (matching calculators[].slug). Kept as *strings* so .ts compiles.
  */
 export const calculatorContent: Record<string, CalculatorContentProps> = {
   emi: {
     title: "Loan EMI Calculator",
     intro:
       "The Loan EMI (Equated Monthly Installment) Calculator helps you estimate a fixed monthly repayment amount for loans. It combines principal and interest over your chosen tenure, making it easier to compare lenders and plan your finances. Useful for home, car, or personal loans in India, UAE, and globally.",
-    formula: (
-      <>
-        EMI = (P × r × (1 + r)
-        <sup>n</sup>) ÷ ((1 + r)
-        <sup>n</sup> − 1)
-      </>
-    ),
+    // No JSX in .ts files; use plain text version
+    formula:
+      "EMI = (P × r × (1 + r)^n) ÷ ((1 + r)^n − 1)",
     variables: [
       { symbol: "P", meaning: "Loan principal" },
       { symbol: "r", meaning: "Monthly interest rate (annual ÷ 12)" },
@@ -44,13 +40,8 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
     title: "BMI (Body Mass Index) Calculator",
     intro:
       "The BMI Calculator estimates body mass index using height and weight. It helps identify underweight, normal, overweight, and obese categories. Widely used as a quick screening tool but not a substitute for professional medical advice.",
-    formula: (
-      <>
-        BMI = weight(kg) ÷ [height(m)]
-        <sup>2</sup> &nbsp;|&nbsp; BMI = 703 × weight(lb) ÷ [height(in)]
-        <sup>2</sup>
-      </>
-    ),
+    formula:
+      "BMI = weight(kg) ÷ [height(m)]^2  |  BMI (US) = 703 × weight(lb) ÷ [height(in)]^2",
     variables: [
       { symbol: "weight", meaning: "Body weight in kilograms or pounds" },
       { symbol: "height", meaning: "Body height in meters or inches" },
@@ -72,12 +63,8 @@ export const calculatorContent: Record<string, CalculatorContentProps> = {
     title: "SIP (Systematic Investment Plan) Calculator",
     intro:
       "SIP is a disciplined way to invest a fixed amount regularly in mutual funds. This calculator projects maturity values using compounding, helping plan long-term goals like retirement or education.",
-    formula: (
-      <>
-        FV = P × [((1 + r/n)
-        <sup>n×t</sup> − 1) ÷ (r/n)] × (1 + r/n)
-      </>
-    ),
+    formula:
+      "FV = P × [((1 + r/n)^(n×t) − 1) ÷ (r/n)] × (1 + r/n)",
     variables: [
       { symbol: "P", meaning: "Installment amount" },
       { symbol: "r", meaning: "Annual return rate" },
