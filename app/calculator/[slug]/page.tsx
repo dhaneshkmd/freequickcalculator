@@ -97,8 +97,6 @@ export function generateMetadata({ params }: Props): Metadata {
   }
 
   const url = `${SITE}/calculator/${calc.slug}`;
-
-  // If someone hits a non-ready slug directly, ask crawlers not to index it.
   const robots =
     calc.status !== "ready" ? { index: false, follow: true } : undefined;
 
@@ -205,7 +203,7 @@ export default async function CalculatorPage({ params }: Props) {
 
   const Component = calc.componentId ? componentMap[calc.componentId] : undefined;
 
-  // 🔽 Try to load long-form content lazily; ignore if file/slug is missing
+  // Load long-form content lazily; ignore if file/slug is missing
   let content: import("@/components/CalculatorContent").CalculatorContentProps | null = null;
   try {
     const mod = await import("@/data/calculatorContent");
@@ -214,19 +212,25 @@ export default async function CalculatorPage({ params }: Props) {
     content = null;
   }
 
+  // ── Rich content branch (includes visible ad) ────────────────────────────────
   if (content) {
     return (
       <CalculatorContent
         {...content}
-        // Place an ad slot politely in-content (shown only after consent)
-        ad={<AdSlot slot="1234567890" />} // TODO: replace with your real slot id
+        ad={
+          // ✅ Replace with your real top-of-calculator slot ID
+          <AdSlot slot="YOUR_CALC_TOP_SLOT_ID" reserveHeight={300} className="my-6" />
+        }
       >
         {Component ? <Component /> : null}
+
+        {/* ✅ Optional mid-page ad for long content */}
+        <AdSlot slot="YOUR_CALC_MID_SLOT_ID" reserveHeight={300} className="my-10" />
       </CalculatorContent>
     );
   }
 
-  // Fallback: simple header + widget (until you add content for this slug)
+  // ── Fallback branch (also includes visible ads) ─────────────────────────────
   return (
     <div className="space-y-6">
       <header className="space-y-2">
@@ -236,6 +240,10 @@ export default async function CalculatorPage({ params }: Props) {
         ) : null}
       </header>
 
+      {/* ✅ Ad below the header (above the widget) */}
+      <AdSlot slot="YOUR_CALC_TOP_SLOT_ID" reserveHeight={300} className="my-4" />
+
+      {/* The interactive widget */}
       {Component ? (
         <Component />
       ) : (
@@ -244,6 +252,9 @@ export default async function CalculatorPage({ params }: Props) {
           description={calc.description}
         />
       )}
+
+      {/* ✅ Optional: second ad lower on the page */}
+      <AdSlot slot="YOUR_CALC_MID_SLOT_ID" reserveHeight={300} className="my-10" />
     </div>
   );
 }
